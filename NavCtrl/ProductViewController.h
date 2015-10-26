@@ -10,4 +10,6 @@
 
 @interface ProductViewController : UITableViewController
 @property (nonatomic, retain) NSArray *products;
+@property (nonatomic, retain) NSDictionary *icons;
+
 @end

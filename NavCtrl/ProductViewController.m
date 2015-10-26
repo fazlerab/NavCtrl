@@ -40,9 +40,22 @@
     
     if ([self.title isEqualToString:@"Apple mobile devices"]) {
         self.products = @[@"iPad", @"iPod Touch",@"iPhone"];
-    } else {
+        
+    } else if ([self.title isEqualToString:@"Samsung mobile devices"]){
         self.products = @[@"Galaxy S4", @"Galaxy Note", @"Galaxy Tab"];
+        
+    } else if ([self.title isEqualToString:@"Motorola mobile devices"]) {
+        self.products = @[@"Moto X", @"Moto G", @"Moto E"];
+        
+    } else {
+        self.products = @[@"Nexus 5X", @"G4", @"G Pad"];
     }
+    
+    self.icons = @{@"Apple mobile devices" : @[@"iPad.png", @"iPod.png", @"iPhone.png"],
+                   @"Samsung mobile devices" : @[@"galaxyS4.jpg", @"galaxyNote.png", @"galaxyTab.jpg"],
+                   @"Motorola mobile devices" : @[@"motoX.png", @"motoG.png", @"motoE.png"],
+                   @"LG mobile devices" : @[@"nexus5X.jpg", @"G4.png", @"GPad.jpg"]};
+    
     [self.tableView reloadData];
 }
 
@@ -77,6 +90,11 @@
     }
     // Configure the cell...
     cell.textLabel.text = [self.products objectAtIndex:[indexPath row]];
+    
+    NSArray *icons = (NSArray *)[self.icons objectForKey:self.title];
+    NSString *icon = (NSString *)[icons objectAtIndex:[indexPath row]];
+    cell.imageView.image = [UIImage imageNamed:icon];
+    
     return cell;
 }
 

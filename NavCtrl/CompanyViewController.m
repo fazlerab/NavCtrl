@@ -35,11 +35,10 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
+    self.companyList = @[@"Apple mobile devices",@"Samsung mobile devices", @"Motorola mobile devices", @"LG mobile devices"];
     
-    self.companyList = @[@"Apple mobile devices",@"Samsung mobile devices"];
+    self.companyIcons = @[@"apple.png", @"samsung.png", @"motorola.png", @"lg.jpg"];
     self.title = @"Mobile device makers";
-    
-    
 }
 
 - (void)didReceiveMemoryWarning
@@ -75,6 +74,9 @@
     // Configure the cell...
     
     cell.textLabel.text = [self.companyList objectAtIndex:[indexPath row]];
+    
+    UIImage *image = [UIImage imageNamed:self.companyIcons[indexPath.row]];
+    [[cell imageView] setImage:image];
     
     return cell;
 }
@@ -125,12 +127,15 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 
-
+    /*
     if (indexPath.row == 0){
         self.productViewController.title = @"Apple mobile devices";
     } else {
         self.productViewController.title = @"Samsung mobile devices";
     }
+     */
+    
+    self.productViewController.title = self.companyList[indexPath.row];
     
     [self.navigationController
         pushViewController:self.productViewController

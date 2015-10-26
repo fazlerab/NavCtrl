@@ -7,6 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1D991EAB1BDE92260012E668 /* iPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D991EAA1BDE92260012E668 /* iPad.png */; };
+		1D991EAD1BDE92340012E668 /* iPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D991EAC1BDE92340012E668 /* iPhone.png */; };
+		1D991EAF1BDE923C0012E668 /* iPod.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D991EAE1BDE923C0012E668 /* iPod.png */; };
+		1D991EB11BDEA30F0012E668 /* galaxyS4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1D991EB01BDEA30F0012E668 /* galaxyS4.jpg */; };
+		1D991EB31BDEA3C00012E668 /* galaxyNote.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D991EB21BDEA3C00012E668 /* galaxyNote.png */; };
+		1D991EB51BDEA4BA0012E668 /* galaxyTab.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1D991EB41BDEA4BA0012E668 /* galaxyTab.jpg */; };
+		1D991EB71BDEA6610012E668 /* motoX.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D991EB61BDEA6610012E668 /* motoX.png */; };
+		1D991EB91BDEA6E90012E668 /* motoG.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D991EB81BDEA6E90012E668 /* motoG.png */; };
+		1D991EBB1BDEA75D0012E668 /* motoE.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D991EBA1BDEA75D0012E668 /* motoE.png */; };
+		1D991EBD1BDEAC860012E668 /* G4.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D991EBC1BDEAC860012E668 /* G4.png */; };
+		1D991EBF1BDEAC950012E668 /* GPad.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1D991EBE1BDEAC950012E668 /* GPad.jpg */; };
+		1D991EC11BDEACD60012E668 /* nexus5X.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1D991EC01BDEACD60012E668 /* nexus5X.jpg */; };
+		1DF5A03A1BDE881900B51945 /* lg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1DF5A0391BDE881900B51945 /* lg.jpg */; };
+		1DF5A03E1BDE8C0600B51945 /* samsung.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DF5A03D1BDE8C0600B51945 /* samsung.png */; };
+		1DF5A0421BDE8E0D00B51945 /* motorola.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DF5A0411BDE8E0D00B51945 /* motorola.png */; };
+		1DF5A0441BDE8EC700B51945 /* apple.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DF5A0431BDE8EC700B51945 /* apple.png */; };
 		48A656B518163BF200746D36 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48A656B418163BF200746D36 /* Foundation.framework */; };
 		48A656B718163BF200746D36 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48A656B618163BF200746D36 /* CoreGraphics.framework */; };
 		48A656B918163BF200746D36 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48A656B818163BF200746D36 /* UIKit.framework */; };
@@ -36,6 +52,22 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1D991EAA1BDE92260012E668 /* iPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPad.png; sourceTree = "<group>"; };
+		1D991EAC1BDE92340012E668 /* iPhone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhone.png; sourceTree = "<group>"; };
+		1D991EAE1BDE923C0012E668 /* iPod.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPod.png; sourceTree = "<group>"; };
+		1D991EB01BDEA30F0012E668 /* galaxyS4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = galaxyS4.jpg; sourceTree = "<group>"; };
+		1D991EB21BDEA3C00012E668 /* galaxyNote.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = galaxyNote.png; sourceTree = "<group>"; };
+		1D991EB41BDEA4BA0012E668 /* galaxyTab.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = galaxyTab.jpg; sourceTree = "<group>"; };
+		1D991EB61BDEA6610012E668 /* motoX.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = motoX.png; sourceTree = "<group>"; };
+		1D991EB81BDEA6E90012E668 /* motoG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = motoG.png; sourceTree = "<group>"; };
+		1D991EBA1BDEA75D0012E668 /* motoE.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = motoE.png; sourceTree = "<group>"; };
+		1D991EBC1BDEAC860012E668 /* G4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = G4.png; sourceTree = "<group>"; };
+		1D991EBE1BDEAC950012E668 /* GPad.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = GPad.jpg; sourceTree = "<group>"; };
+		1D991EC01BDEACD60012E668 /* nexus5X.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = nexus5X.jpg; sourceTree = "<group>"; };
+		1DF5A0391BDE881900B51945 /* lg.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = lg.jpg; sourceTree = "<group>"; };
+		1DF5A03D1BDE8C0600B51945 /* samsung.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = samsung.png; sourceTree = "<group>"; };
+		1DF5A0411BDE8E0D00B51945 /* motorola.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = motorola.png; sourceTree = "<group>"; };
+		1DF5A0431BDE8EC700B51945 /* apple.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = apple.png; sourceTree = "<group>"; };
 		48A656B118163BF200746D36 /* NavCtrl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NavCtrl.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		48A656B418163BF200746D36 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		48A656B618163BF200746D36 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -157,6 +189,22 @@
 		48A656BB18163BF200746D36 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				1DF5A0431BDE8EC700B51945 /* apple.png */,
+				1D991EAA1BDE92260012E668 /* iPad.png */,
+				1D991EAC1BDE92340012E668 /* iPhone.png */,
+				1D991EAE1BDE923C0012E668 /* iPod.png */,
+				1DF5A03D1BDE8C0600B51945 /* samsung.png */,
+				1D991EB01BDEA30F0012E668 /* galaxyS4.jpg */,
+				1D991EB21BDEA3C00012E668 /* galaxyNote.png */,
+				1D991EB41BDEA4BA0012E668 /* galaxyTab.jpg */,
+				1DF5A0411BDE8E0D00B51945 /* motorola.png */,
+				1D991EB61BDEA6610012E668 /* motoX.png */,
+				1D991EB81BDEA6E90012E668 /* motoG.png */,
+				1D991EBA1BDEA75D0012E668 /* motoE.png */,
+				1DF5A0391BDE881900B51945 /* lg.jpg */,
+				1D991EC01BDEACD60012E668 /* nexus5X.jpg */,
+				1D991EBC1BDEAC860012E668 /* G4.png */,
+				1D991EBE1BDEAC950012E668 /* GPad.jpg */,
 				48A656ED1816468000746D36 /* Sunflower.gif */,
 				48A656BC18163BF200746D36 /* NavCtrl-Info.plist */,
 				48A656BD18163BF200746D36 /* InfoPlist.strings */,
@@ -260,9 +308,25 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1D991EAD1BDE92340012E668 /* iPhone.png in Resources */,
+				1DF5A03A1BDE881900B51945 /* lg.jpg in Resources */,
+				1D991EB91BDEA6E90012E668 /* motoG.png in Resources */,
+				1D991EB71BDEA6610012E668 /* motoX.png in Resources */,
 				48A656EE1816468000746D36 /* Sunflower.gif in Resources */,
+				1D991EBF1BDEAC950012E668 /* GPad.jpg in Resources */,
+				1D991EAB1BDE92260012E668 /* iPad.png in Resources */,
 				48A656E718163C1B00746D36 /* CompanyViewController.xib in Resources */,
+				1DF5A0421BDE8E0D00B51945 /* motorola.png in Resources */,
+				1D991EBD1BDEAC860012E668 /* G4.png in Resources */,
+				1DF5A03E1BDE8C0600B51945 /* samsung.png in Resources */,
+				1D991EBB1BDEA75D0012E668 /* motoE.png in Resources */,
 				48A656BF18163BF200746D36 /* InfoPlist.strings in Resources */,
+				1D991EB11BDEA30F0012E668 /* galaxyS4.jpg in Resources */,
+				1D991EAF1BDE923C0012E668 /* iPod.png in Resources */,
+				1DF5A0441BDE8EC700B51945 /* apple.png in Resources */,
+				1D991EB51BDEA4BA0012E668 /* galaxyTab.jpg in Resources */,
+				1D991EB31BDEA3C00012E668 /* galaxyNote.png in Resources */,
+				1D991EC11BDEACD60012E668 /* nexus5X.jpg in Resources */,
 				48A656C718163BF200746D36 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
