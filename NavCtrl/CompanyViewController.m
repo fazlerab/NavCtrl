@@ -38,6 +38,7 @@
     self.companyList = @[@"Apple mobile devices",@"Samsung mobile devices", @"Motorola mobile devices", @"LG mobile devices"];
     
     self.companyIcons = @[@"apple.png", @"samsung.png", @"motorola.png", @"lg.jpg"];
+    
     self.title = @"Mobile device makers";
 }
 
@@ -72,7 +73,6 @@
     }
     
     // Configure the cell...
-    
     cell.textLabel.text = [self.companyList objectAtIndex:[indexPath row]];
     
     UIImage *image = [UIImage imageNamed:self.companyIcons[indexPath.row]];
@@ -126,7 +126,6 @@
 // In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
     /*
     if (indexPath.row == 0){
         self.productViewController.title = @"Apple mobile devices";
@@ -136,14 +135,12 @@
      */
     
     self.productViewController.title = self.companyList[indexPath.row];
+    self.productViewController.icon = self.companyIcons[indexPath.row];
     
-    [self.navigationController
-        pushViewController:self.productViewController
-        animated:YES];
-    
-
+    [self.navigationController pushViewController:self.productViewController animated:YES];
 }
- 
 
-
+- (void)dealloc {
+    [super dealloc];
+}
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "ProductViewController.h"
+#import "ProductDetailViewController.h"
 
 @interface ProductViewController ()
 
@@ -39,22 +40,29 @@
     [super viewWillAppear:animated];
     
     if ([self.title isEqualToString:@"Apple mobile devices"]) {
-        self.products = @[@"iPad", @"iPod Touch",@"iPhone"];
+        self.products = @[@"iPad Air 2", @"Watch",@"iPhone 6S"];
+        self.URLs = @[@"https://www.apple.com/ipad-air-2/",
+                      @"https://www.apple.com/watch/",
+                      @"https://www.apple.com/iphone-6s/"];
         
     } else if ([self.title isEqualToString:@"Samsung mobile devices"]){
-        self.products = @[@"Galaxy S4", @"Galaxy Note", @"Galaxy Tab"];
+        self.products = @[@"Galaxy S6", @"Galaxy Note", @"Galaxy Tab"];
+        self.URLs = @[@"http://www.samsung.com/us/mobile/cell-phones/SM-G928VZDAVZW",
+                      @"http://www.samsung.com/us/mobile/cell-phones/SM-N920TZKATMB",
+                      @"http://www.samsung.com/us/mobile/galaxy-tab/SM-T810NZWEXAR"];
         
     } else if ([self.title isEqualToString:@"Motorola mobile devices"]) {
         self.products = @[@"Moto X", @"Moto G", @"Moto E"];
+        self.URLs = @[@"https://www.motorola.com/us/products/moto-x-pure-edition",
+                      @"https://www.motorola.com/us/products/moto-g",
+                      @"https://www.motorola.com/us/smartphones/moto-e-2nd-gen/moto-e-2nd-gen.html"];
         
     } else {
-        self.products = @[@"Nexus 5X", @"G4", @"G Pad"];
+        self.products = @[@"Nexus 5X", @"G4", @"G Pad X 10.1"];
+        self.URLs = @[@"https://www.google.com/nexus/5x/",
+                      @"http://www.lg.com/us/mobile-phones/g4",
+                      @"http://www.lg.com/us/tablets/lg-V930-g-pad-x-10.1"];
     }
-    
-    self.icons = @{@"Apple mobile devices" : @[@"iPad.png", @"iPod.png", @"iPhone.png"],
-                   @"Samsung mobile devices" : @[@"galaxyS4.jpg", @"galaxyNote.png", @"galaxyTab.jpg"],
-                   @"Motorola mobile devices" : @[@"motoX.png", @"motoG.png", @"motoE.png"],
-                   @"LG mobile devices" : @[@"nexus5X.jpg", @"G4.png", @"GPad.jpg"]};
     
     [self.tableView reloadData];
 }
@@ -69,14 +77,14 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
+//#warning Potentially incomplete method implementation.
     // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
+//#warning Incomplete method implementation.
     // Return the number of rows in the section.
     return [self.products count];
 }
@@ -91,9 +99,7 @@
     // Configure the cell...
     cell.textLabel.text = [self.products objectAtIndex:[indexPath row]];
     
-    NSArray *icons = (NSArray *)[self.icons objectForKey:self.title];
-    NSString *icon = (NSString *)[icons objectAtIndex:[indexPath row]];
-    cell.imageView.image = [UIImage imageNamed:icon];
+    cell.imageView.image = [UIImage imageNamed:self.icon];
     
     return cell;
 }
@@ -137,7 +143,7 @@
 }
 */
 
-/*
+
 #pragma mark - Table view delegate
 
 // In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
@@ -145,14 +151,14 @@
 {
     // Navigation logic may go here, for example:
     // Create the next view controller.
-    <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
+    ProductDetailViewController *detailViewController = [[ProductDetailViewController alloc] init];
 
     // Pass the selected object to the new view controller.
+    detailViewController.title = self.products[indexPath.row];
+    detailViewController.URL = [NSURL URLWithString:[self.URLs objectAtIndex:[indexPath row]]];
     
     // Push the view controller.
     [self.navigationController pushViewController:detailViewController animated:YES];
 }
- 
- */
 
 @end

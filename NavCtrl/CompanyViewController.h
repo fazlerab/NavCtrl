@@ -15,6 +15,6 @@
 @property (nonatomic, retain) NSArray *companyList;
 @property (nonatomic, retain) NSArray *companyIcons;
 
-@property (nonatomic, retain) IBOutlet  ProductViewController * productViewController;
+@property (nonatomic, retain) IBOutlet  ProductViewController *productViewController;
 
 @end

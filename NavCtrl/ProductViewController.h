@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface ProductViewController : UITableViewController
+
 @property (nonatomic, retain) NSArray *products;
-@property (nonatomic, retain) NSDictionary *icons;
+@property (nonatomic, retain) NSString *icon;
+@property (nonatomic, retain) NSArray *URLs;
 
 @end
