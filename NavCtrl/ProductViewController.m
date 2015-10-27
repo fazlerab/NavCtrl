@@ -11,6 +11,8 @@
 
 @interface ProductViewController ()
 
+@property (nonatomic, retain) ProductDetailViewController *detailViewController;
+
 @end
 
 @implementation ProductViewController
@@ -28,6 +30,8 @@
 {
     [super viewDidLoad];
 
+    _detailViewController = [[ProductDetailViewController alloc] init];
+    
     // Uncomment the following line to preserve selection between presentations.
      self.clearsSelectionOnViewWillAppear = NO;
  
@@ -151,14 +155,13 @@
 {
     // Navigation logic may go here, for example:
     // Create the next view controller.
-    ProductDetailViewController *detailViewController = [[ProductDetailViewController alloc] init];
 
     // Pass the selected object to the new view controller.
-    detailViewController.title = self.products[indexPath.row];
-    detailViewController.URL = [NSURL URLWithString:[self.URLs objectAtIndex:[indexPath row]]];
+    self.detailViewController.title = self.products[indexPath.row];
+    self.detailViewController.URL = [NSURL URLWithString:[self.URLs objectAtIndex:[indexPath row]]];
     
     // Push the view controller.
-    [self.navigationController pushViewController:detailViewController animated:YES];
+    [self.navigationController pushViewController:self.detailViewController animated:YES];
 }
 
 @end

@@ -6,9 +6,10 @@
 //  Copyright © 2015 Aditya Narayan. All rights reserved.
 //
 
+#import <WebKit/WebKit.h>
 #import "ProductDetailViewController.h"
 
-@interface ProductDetailViewController () <UIWebViewDelegate>
+@interface ProductDetailViewController () <WKNavigationDelegate>
 
 @end
 
@@ -18,15 +19,20 @@
     _URL = URL;
     if (_URL) {
         NSURLRequest *req = [NSURLRequest requestWithURL:_URL];
-        [(UIWebView *)self.view loadRequest:req];
+        [(WKWebView *)self.view loadRequest:req];
     }
 }
 
 - (void)loadView {
-    UIWebView *webView = [[UIWebView alloc] init];
-    [webView setDelegate:self];;
-    [webView setScalesPageToFit:YES];
+    WKWebViewConfiguration *webViewConfig = [[WKWebViewConfiguration alloc] init];
+    WKWebView *webView = [[WKWebView alloc] initWithFrame:[UIScreen mainScreen].bounds
+                                            configuration:webViewConfig];
+    webView.navigationDelegate = self;
     [super setView:webView];
+    
+//    UIWebView *webView = [[UIWebView alloc] init];
+//    [webView setDelegate:self];;
+//    [webView setScalesPageToFit:YES];
 }
 
 - (void)viewDidLoad {
@@ -50,26 +56,23 @@
     // Pass the selected object to the new view controller.
 }
 */
+- (void) dealloc {
+    ((WKWebView *)self.view).navigationDelegate = nil;
+    [super dealloc];
+}
 
 // MARK: UIWebViewDelegate methods
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
-    NSLog(@"shouldStartLoadWithRequest: url=%@", request.URL.absoluteString);
-    return YES;
-}
-- (void)webViewDidStartLoad:(UIWebView *)webView {
-    NSLog(@"webViewDidStartLoad:");
-}
-
-- (void)webViewDidFinishLoad:(UIWebView *)webView {
-    NSLog(@"webViewDidFinishLoad:");
-}
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(nullable NSError *)error {
     NSLog(@"didFailLoadWithError: %@", error.localizedDescription);
 }
 
-- (void) dealloc {
-    ((UIWebView *)self.view).delegate = nil;
-    [super dealloc];
+// MARK: WKNavigationDelegate methods
+- (void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error {
+    NSLog(@"didFailNavigation: %@", error.localizedDescription);
+}
+
+- (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(WKNavigation *)navigation withError:(NSError *)error {
+    NSLog(@"didFailProvisionalNavigation: %@", error.localizedDescription);
 }
 
 @end
