@@ -2,7 +2,7 @@
 //  ProductDetailViewController.m
 //  NavCtrl
 //
-//  Created by Imran on 10/26/15.
+//  Created by Fazle Rab on 10/26/15.
 //  Copyright © 2015 Aditya Narayan. All rights reserved.
 //
 
@@ -38,8 +38,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -56,6 +54,7 @@
     // Pass the selected object to the new view controller.
 }
 */
+
 - (void) dealloc {
     ((WKWebView *)self.view).navigationDelegate = nil;
     [super dealloc];

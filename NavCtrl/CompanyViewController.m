@@ -11,6 +11,8 @@
 
 @interface CompanyViewController ()
 
+@property (nonatomic, retain) NSMutableArray *companyList;
+
 @end
 
 @implementation CompanyViewController
@@ -35,9 +37,11 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    self.companyList = @[@"Apple mobile devices",@"Samsung mobile devices", @"Motorola mobile devices", @"LG mobile devices"];
-    
-    self.companyIcons = @[@"apple.png", @"samsung.png", @"motorola.png", @"lg.jpg"];
+    self.companyList = [NSMutableArray arrayWithArray:
+                        @[@{@"name": @"Apple mobile devices",    @"icon": @"apple.png"},
+                          @{@"name": @"Samsung mobile devices",  @"icon": @"samsung.png"},
+                          @{@"name": @"Motorola mobile devices", @"icon": @"motorola.png"},
+                          @{@"name": @"LG mobile devices",       @"icon": @"lg.jpg"}]];
     
     self.title = @"Mobile device makers";
 }
@@ -52,14 +56,12 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
     return [self.companyList count];
 }
@@ -73,52 +75,60 @@
     }
     
     // Configure the cell...
-    cell.textLabel.text = [self.companyList objectAtIndex:[indexPath row]];
+    NSDictionary *company = [self.companyList objectAtIndex:[indexPath row]];
+    cell.textLabel.text = company[@"name"];
     
-    UIImage *image = [UIImage imageNamed:self.companyIcons[indexPath.row]];
+    UIImage *image = [UIImage imageNamed:company[@"icon"]];
     [[cell imageView] setImage:image];
     
     return cell;
 }
 
-/*
+
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Return NO if you do not want the specified item to be editable.
     return YES;
 }
-*/
 
-/*
+
+
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
+        NSInteger index = [indexPath row];
+        [self.companyList removeObjectAtIndex:index];
+        
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }   
     else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
     }   
 }
-*/
 
-/*
+
+
 // Override to support rearranging the table view.
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
 {
+    if (fromIndexPath.row == toIndexPath.row) return;
+    
+    NSDictionary *company = [[self.companyList objectAtIndex:fromIndexPath.row] retain];
+    [self.companyList removeObjectAtIndex:fromIndexPath.row];
+    [self.companyList insertObject:company atIndex:toIndexPath.row];
+    [company release];
 }
-*/
 
-/*
+
 // Override to support conditional rearranging of the table view.
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Return NO if you do not want the item to be re-orderable.
     return YES;
 }
-*/
 
 
 #pragma mark - Table view delegate
@@ -126,16 +136,11 @@
 // In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    /*
-    if (indexPath.row == 0){
-        self.productViewController.title = @"Apple mobile devices";
-    } else {
-        self.productViewController.title = @"Samsung mobile devices";
-    }
-     */
+    NSInteger index = [indexPath row];
+    NSDictionary *company = [self.companyList objectAtIndex:index];
     
-    self.productViewController.title = self.companyList[indexPath.row];
-    self.productViewController.icon = self.companyIcons[indexPath.row];
+    self.productViewController.icon  = company[@"icon"];
+    self.productViewController.title = company[@"name"];
     
     [self.navigationController pushViewController:self.productViewController animated:YES];
 }
@@ -143,4 +148,6 @@
 - (void)dealloc {
     [super dealloc];
 }
+
+
 @end
