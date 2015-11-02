@@ -8,11 +8,12 @@
 
 #import "ProductViewController.h"
 #import "ProductDetailViewController.h"
+#import "Company.h"
+#import "Product.h"
+#import "CompanyDAO.h"
 
 @interface ProductViewController ()
 
-@property (nonatomic, retain) NSMutableDictionary *productData;
-@property (nonatomic, retain) NSMutableArray *products;
 @property (nonatomic, retain) ProductDetailViewController *detailViewController;
 
 @end
@@ -32,7 +33,6 @@
 {
     [super viewDidLoad];
 
-    [self buildProductData];
     _detailViewController = [[ProductDetailViewController alloc] init];
     
     // Uncomment the following line to preserve selection between presentations.
@@ -44,8 +44,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    self.products = [self.productData objectForKey:self.title];
     
     [self.tableView reloadData];
 }
@@ -69,7 +67,7 @@
 {
 //#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return [self.products count];
+    return [[[CompanyDAO sharedInstance] getProductsByCompany:self.title] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -80,10 +78,11 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     // Configure the cell...
-    NSDictionary *product = [self.products objectAtIndex:[indexPath row]];
-    cell.textLabel.text = [product objectForKey:@"name"];
     
-    cell.imageView.image = [UIImage imageNamed:self.icon];
+    Company *company = [[CompanyDAO sharedInstance] getCompanyByName:self.title];
+    Product *product = [company.products objectAtIndex:indexPath.row];
+    cell.textLabel.text = product.name;
+    cell.imageView.image = [UIImage imageNamed:company.icon];
     
     return cell;
 }
@@ -102,7 +101,7 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
-        [self.products removeObjectAtIndex:[indexPath row]];
+        [[CompanyDAO sharedInstance] removeProductAtIndex:indexPath.row forCompanyName:self.title];
         
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
@@ -116,11 +115,17 @@
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
 {
     if (fromIndexPath.row == toIndexPath.row) return;
-        
+    
+    [[CompanyDAO sharedInstance] moveProductFromIndex:fromIndexPath.row
+                                              toIndex:toIndexPath.row
+                                       forCompanyName:self.title];
+    
+    /*
     NSDictionary *product = [[self.products objectAtIndex:[fromIndexPath row]] retain];
     [self.products removeObjectAtIndex:[fromIndexPath row]];
     [self.products insertObject:product atIndex:[toIndexPath row]];
     [product release];
+     */
 }
 
 
@@ -140,42 +145,12 @@
     // Create the next view controller.
 
     // Pass the selected object to the new view controller.
-    self.detailViewController.title = [self.products[indexPath.row] objectForKey:@"name"];
-    self.detailViewController.URL = [NSURL URLWithString:[self.products[indexPath.row] objectForKey:@"url"]];
+    Product *product = [[CompanyDAO sharedInstance] getProductAtIndex:indexPath.row forCompanyName:self.title];
+    self.detailViewController.title = product.name;
+    self.detailViewController.URL = product.URL;
     
     // Push the view controller.
     [self.navigationController pushViewController:self.detailViewController animated:YES];
 }
 
-- (void) buildProductData {
-    if (!self.productData) {
-        NSMutableArray *appleProducts = [NSMutableArray arrayWithArray:
-             @[@{@"name": @"iPad Air 2", @"url": @"https://www.apple.com/ipad-air-2/"},
-               @{@"name": @"Watch",      @"url": @"https://www.apple.com/watch/"},
-               @{@"name": @"iPhone 6S",  @"url": @"https://www.apple.com/iphone-6s/"}]];
-        
-        NSMutableArray *samsungProducts = [NSMutableArray arrayWithArray:
-               @[@{@"name": @"Galaxy S6",   @"url": @"http://www.samsung.com/us/mobile/cell-phones/SM-G928VZDAVZW"},
-                 @{@"name": @"Galaxy Note", @"url": @"http://www.samsung.com/us/mobile/cell-phones/SM-N920TZKATMB"},
-                 @{@"name": @"Galaxy Tab",  @"url": @"http://www.samsung.com/us/mobile/galaxy-tab/SM-T810NZWEXAR"}]];
-        
-        NSMutableArray *motorolaProducts = [NSMutableArray arrayWithArray:
-                @[@{@"name": @"Moto X", @"url": @"https://www.motorola.com/us/products/moto-x-pure-edition"},
-                  @{@"name": @"Moto G", @"url": @"https://www.motorola.com/us/products/moto-g"},
-                  @{@"name": @"Moto E", @"url": @"https://www.motorola.com/us/smartphones/moto-e-2nd-gen/moto-e-2nd-gen.html"}]];
-        
-        NSMutableArray *lgProducts = [NSMutableArray arrayWithArray:
-              @[@{@"name": @"Nexus 5X",     @"url": @"https://www.google.com/nexus/5x/"},
-                @{@"name": @"G4",           @"url": @"http://www.lg.com/us/mobile-phones/g4"},
-                @{@"name": @"G Pad X 10.1", @"url": @"http://www.lg.com/us/tablets/lg-V930-g-pad-x-10.1"}]];
-        
-        NSMutableDictionary *allProducts = [[NSMutableDictionary alloc] init];
-        [allProducts setObject:appleProducts    forKey:@"Apple mobile devices"];
-        [allProducts setObject:samsungProducts  forKey:@"Samsung mobile devices"];
-        [allProducts setObject:motorolaProducts forKey:@"Motorola mobile devices"];
-        [allProducts setObject:lgProducts       forKey:@"LG mobile devices"];
-        
-        self.productData = allProducts;
-    }
-}
 @end

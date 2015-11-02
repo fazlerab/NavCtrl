@@ -8,6 +8,7 @@
 
 #import <WebKit/WebKit.h>
 #import "ProductDetailViewController.h"
+#import "Product.h"
 
 @interface ProductDetailViewController () <WKNavigationDelegate>
 
@@ -15,30 +16,27 @@
 
 @implementation ProductDetailViewController
 
-- (void) setURL:(NSURL *)URL {
-    _URL = URL;
-    if (_URL) {
-        NSURLRequest *req = [NSURLRequest requestWithURL:_URL];
-        [(WKWebView *)self.view loadRequest:req];
-    }
-}
-
 - (void)loadView {
     WKWebViewConfiguration *webViewConfig = [[WKWebViewConfiguration alloc] init];
     WKWebView *webView = [[WKWebView alloc] initWithFrame:[UIScreen mainScreen].bounds
                                             configuration:webViewConfig];
     webView.navigationDelegate = self;
     [super setView:webView];
-    
-//    UIWebView *webView = [[UIWebView alloc] init];
-//    [webView setDelegate:self];;
-//    [webView setScalesPageToFit:YES];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 }
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    NSURL *URL = [NSURL URLWithString:self.URL];
+    NSURLRequest *req = [NSURLRequest requestWithURL:URL];
+    [(WKWebView *)self.view loadRequest:req];
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

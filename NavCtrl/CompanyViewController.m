@@ -8,10 +8,11 @@
 
 #import "CompanyViewController.h"
 #import "ProductViewController.h"
+#import "CompanyDAO.h"
+#import "Company.h"
+#import "Product.h"
 
 @interface CompanyViewController ()
-
-@property (nonatomic, retain) NSMutableArray *companyList;
 
 @end
 
@@ -37,12 +38,6 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    self.companyList = [NSMutableArray arrayWithArray:
-                        @[@{@"name": @"Apple mobile devices",    @"icon": @"apple.png"},
-                          @{@"name": @"Samsung mobile devices",  @"icon": @"samsung.png"},
-                          @{@"name": @"Motorola mobile devices", @"icon": @"motorola.png"},
-                          @{@"name": @"LG mobile devices",       @"icon": @"lg.jpg"}]];
-    
     self.title = @"Mobile device makers";
 }
 
@@ -63,7 +58,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [self.companyList count];
+    return [[[CompanyDAO sharedInstance] getCompanyList] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -75,10 +70,11 @@
     }
     
     // Configure the cell...
-    NSDictionary *company = [self.companyList objectAtIndex:[indexPath row]];
-    cell.textLabel.text = company[@"name"];
+    Company *company = [[CompanyDAO sharedInstance] getCompanyAtIndex:indexPath.row];
     
-    UIImage *image = [UIImage imageNamed:company[@"icon"]];
+    cell.textLabel.text = company.name;
+    
+    UIImage *image = [UIImage imageNamed:company.icon];
     [[cell imageView] setImage:image];
     
     return cell;
@@ -99,8 +95,7 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
-        NSInteger index = [indexPath row];
-        [self.companyList removeObjectAtIndex:index];
+        [[CompanyDAO sharedInstance] deleteCompanyAtIndex:indexPath.row];
         
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }   
@@ -115,11 +110,12 @@
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
 {
     if (fromIndexPath.row == toIndexPath.row) return;
+    [[CompanyDAO sharedInstance] moveCompanyFromIndex:fromIndexPath.row toIndex:toIndexPath.row];
     
-    NSDictionary *company = [[self.companyList objectAtIndex:fromIndexPath.row] retain];
-    [self.companyList removeObjectAtIndex:fromIndexPath.row];
-    [self.companyList insertObject:company atIndex:toIndexPath.row];
-    [company release];
+//    Company *company = [[self.companyList objectAtIndex:fromIndexPath.row] retain];
+//    [self.companyList removeObjectAtIndex:fromIndexPath.row];
+//    [self.companyList insertObject:company atIndex:toIndexPath.row];
+//    [company release];
 }
 
 
@@ -136,18 +132,13 @@
 // In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSInteger index = [indexPath row];
-    NSDictionary *company = [self.companyList objectAtIndex:index];
-    
-    self.productViewController.icon  = company[@"icon"];
-    self.productViewController.title = company[@"name"];
-    
+    Company *company = [[CompanyDAO sharedInstance] getCompanyAtIndex:indexPath.row];
+    self.productViewController.title = company.name;
     [self.navigationController pushViewController:self.productViewController animated:YES];
 }
 
 - (void)dealloc {
     [super dealloc];
 }
-
 
 @end

@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ProductViewController : UITableViewController
+@class Company;
 
-@property (nonatomic, retain) NSString *icon;
+@interface ProductViewController : UITableViewController
 
 @end

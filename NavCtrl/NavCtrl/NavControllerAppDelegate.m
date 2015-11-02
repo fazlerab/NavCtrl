@@ -8,17 +8,19 @@
 
 #import "NavControllerAppDelegate.h"
 #import "CompanyViewController.h"
+#import "Company.h"
+#import "Product.h"
 
 @implementation NavControllerAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
-    UIViewController *rootController = [[CompanyViewController alloc]
-                                        initWithNibName:@"CompanyViewController" bundle:nil];
-    
+    CompanyViewController *companyViewController = [[CompanyViewController alloc]
+                                               initWithNibName:@"CompanyViewController" bundle:nil];
+
     self.navigationController = [[UINavigationController alloc]
-                            initWithRootViewController:rootController];
+                                 initWithRootViewController:companyViewController];
     
     self.window = [[UIWindow alloc]
                    initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -63,5 +65,6 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
 
 @end

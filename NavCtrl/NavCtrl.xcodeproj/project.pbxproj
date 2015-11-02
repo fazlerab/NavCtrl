@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		1D6BF9841BDF215C0035A30E /* ProductDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D6BF9831BDF215C0035A30E /* ProductDetailViewController.m */; };
+		1D88552B1BE7B913008A88C1 /* CompanyDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D88552A1BE7B913008A88C1 /* CompanyDAO.m */; };
+		1DA085E41BE18177008EF141 /* Company.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DA085E31BE18177008EF141 /* Company.m */; };
+		1DA085E71BE181AE008EF141 /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DA085E61BE181AE008EF141 /* Product.m */; };
 		1DF5A03A1BDE881900B51945 /* lg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1DF5A0391BDE881900B51945 /* lg.jpg */; };
 		1DF5A03E1BDE8C0600B51945 /* samsung.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DF5A03D1BDE8C0600B51945 /* samsung.png */; };
 		1DF5A0421BDE8E0D00B51945 /* motorola.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DF5A0411BDE8E0D00B51945 /* motorola.png */; };
@@ -41,8 +44,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1D0A942C1BE2B1E000599B4D /* CompanyDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompanyDAO.h; sourceTree = "<group>"; };
 		1D6BF9821BDF215C0035A30E /* ProductDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductDetailViewController.h; path = ../ProductDetailViewController.h; sourceTree = "<group>"; };
 		1D6BF9831BDF215C0035A30E /* ProductDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductDetailViewController.m; path = ../ProductDetailViewController.m; sourceTree = "<group>"; };
+		1D88552A1BE7B913008A88C1 /* CompanyDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompanyDAO.m; sourceTree = "<group>"; };
+		1DA085E21BE18177008EF141 /* Company.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Company.h; sourceTree = "<group>"; };
+		1DA085E31BE18177008EF141 /* Company.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Company.m; sourceTree = "<group>"; };
+		1DA085E51BE181AE008EF141 /* Product.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Product.h; sourceTree = "<group>"; };
+		1DA085E61BE181AE008EF141 /* Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Product.m; sourceTree = "<group>"; };
 		1DF5A0391BDE881900B51945 /* lg.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = lg.jpg; sourceTree = "<group>"; };
 		1DF5A03D1BDE8C0600B51945 /* samsung.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = samsung.png; sourceTree = "<group>"; };
 		1DF5A0411BDE8E0D00B51945 /* motorola.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = motorola.png; sourceTree = "<group>"; };
@@ -95,6 +104,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1D0A94361BE2D00800599B4D /* DAO */ = {
+			isa = PBXGroup;
+			children = (
+				1D0A942C1BE2B1E000599B4D /* CompanyDAO.h */,
+				1D88552A1BE7B913008A88C1 /* CompanyDAO.m */,
+				1DA085E21BE18177008EF141 /* Company.h */,
+				1DA085E31BE18177008EF141 /* Company.m */,
+				1DA085E51BE181AE008EF141 /* Product.h */,
+				1DA085E61BE181AE008EF141 /* Product.m */,
+			);
+			name = DAO;
+			sourceTree = "<group>";
+		};
 		1D991ECA1BDEE1F30012E668 /* ProductDetailViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -116,6 +138,7 @@
 		483796CC1BCBF7C70062D5AB /* ParentViewController */ = {
 			isa = PBXGroup;
 			children = (
+				48A656E518163C1B00746D36 /* CompanyViewController.xib */,
 				48A656E318163C1B00746D36 /* CompanyViewController.h */,
 				48A656E418163C1B00746D36 /* CompanyViewController.m */,
 			);
@@ -165,11 +188,11 @@
 			isa = PBXGroup;
 			children = (
 				483796CB1BCBF7A00062D5AB /* AppDelegate */,
+				1D0A94361BE2D00800599B4D /* DAO */,
 				483796CC1BCBF7C70062D5AB /* ParentViewController */,
 				483796CD1BCBF7EB0062D5AB /* ProductViewController */,
 				1D991ECA1BDEE1F30012E668 /* ProductDetailViewController */,
 				48A656C618163BF200746D36 /* Images.xcassets */,
-				48A656E518163C1B00746D36 /* CompanyViewController.xib */,
 				48A656BB18163BF200746D36 /* Supporting Files */,
 			);
 			path = NavCtrl;
@@ -311,7 +334,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1D88552B1BE7B913008A88C1 /* CompanyDAO.m in Sources */,
+				1DA085E71BE181AE008EF141 /* Product.m in Sources */,
 				48A656E618163C1B00746D36 /* CompanyViewController.m in Sources */,
+				1DA085E41BE18177008EF141 /* Company.m in Sources */,
 				1D6BF9841BDF215C0035A30E /* ProductDetailViewController.m in Sources */,
 				48A656C518163BF200746D36 /* NavControllerAppDelegate.m in Sources */,
 				48A656C118163BF200746D36 /* main.m in Sources */,

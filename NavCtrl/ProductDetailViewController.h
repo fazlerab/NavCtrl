@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+@class Product;
+
 @interface ProductDetailViewController : UIViewController
 
-@property (nonatomic, retain) NSURL *URL;
+@property (nonatomic, retain) NSString *URL;
 
 @end
