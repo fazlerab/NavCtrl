@@ -24,18 +24,14 @@
 - (instancetype) initWithName:(NSString *)name icon:(NSString *)icon {
     self = [super init];
     if (self) {
-        _name = name;
-        _icon = icon;
+        _name = [name copy];
+        _icon = [icon copy];
     }
     return self;
 }
 
 - (void) setProducts:(NSArray *)products {
     _products = [[NSMutableArray alloc] initWithArray:[products copy]];
-}
-
-- (NSArray *) getProducts {
-    return _products;
 }
 
 - (void)addProduct:(Product *)product {
@@ -51,10 +47,25 @@
     }
 }
 
+- (void) updateProduct:(Product *)product {
+    if (_products) {
+        for(int i = 0; i < _products.count; i++) {
+            Product *p = [_products objectAtIndex:i];
+            if ([p isEqual:product]) {
+                [_products replaceObjectAtIndex:i withObject:product];
+            }
+        }
+    }
+}
+
 - (void)moveProductFromIndex:(NSUInteger)fromIndex toIndex:(NSUInteger)toIndex {
     if (_products) {
         [_products exchangeObjectAtIndex:fromIndex withObjectAtIndex:toIndex];
     }
+}
+
+- (NSString *)description {
+    return [NSString stringWithFormat:@"[Company: name=%@, icon=%@]", self.name, self.icon];
 }
 
 @end

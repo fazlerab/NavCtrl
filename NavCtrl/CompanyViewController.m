@@ -8,11 +8,15 @@
 
 #import "CompanyViewController.h"
 #import "ProductViewController.h"
+#import "NewCompanyViewController.h"
 #import "CompanyDAO.h"
 #import "Company.h"
 #import "Product.h"
 
 @interface CompanyViewController ()
+
+@property (nonatomic, retain) UIBarButtonItem *addButtonItem;
+@property (nonatomic, retain) NewCompanyViewController *detailCompanyViewController;
 
 @end
 
@@ -35,8 +39,11 @@
     // Uncomment the following line to preserve selection between presentations.
      self.clearsSelectionOnViewWillAppear = NO;
  
+    self.addButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+                                                                   target:self
+                                                                   action:@selector(handleAddCompany:)];
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.navigationItem.rightBarButtonItems = @[self.addButtonItem, self.editButtonItem];
     
     self.title = @"Mobile device makers";
 }
@@ -70,11 +77,16 @@
     }
     
     // Configure the cell...
+    // Show disclosure and detail acssory buttons
+    [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+    [cell setEditingAccessoryType:UITableViewCellAccessoryDetailButton];
+
     Company *company = [[CompanyDAO sharedInstance] getCompanyAtIndex:indexPath.row];
-    
     cell.textLabel.text = company.name;
-    
     UIImage *image = [UIImage imageNamed:company.icon];
+    if (!image) {
+        image = [UIImage imageNamed:@"Sunflower.gif"];
+    }
     [[cell imageView] setImage:image];
     
     return cell;
@@ -128,7 +140,6 @@
 
 
 #pragma mark - Table view delegate
-
 // In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -137,8 +148,49 @@
     [self.navigationController pushViewController:self.productViewController animated:YES];
 }
 
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"accessoryButtonTappedForRowWithIndexPath");
+    [self createDetailComanyViewController];
+    Company *company = [[CompanyDAO sharedInstance] getCompanyAtIndex:indexPath.row];
+    self.detailCompanyViewController.company = company;
+    [self showDetailViewController:self.detailCompanyViewController.navigationController sender:self];
+}
+
+- (void) createDetailComanyViewController {
+    if (!self.detailCompanyViewController) {
+        self.detailCompanyViewController = [[NewCompanyViewController alloc] initWithNibName:@"NewCompanyViewController" bundle:nil];
+        
+        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:self.detailCompanyViewController];
+        
+        navController.modalPresentationStyle = UIModalPresentationFormSheet;
+    }
+}
+
+- (void) handleAddCompany:(UIBarButtonItem *)sender {
+    NSLog(@"handleAddCompany");
+    [self createDetailComanyViewController];
+    self.detailCompanyViewController.company = nil;
+    [self showDetailViewController:self.detailCompanyViewController.navigationController sender:self];
+    
+}
+
+- (void) addCompany:(Company *)company {
+    NSLog(@"addCompany: %@", company);
+    [[CompanyDAO sharedInstance] addCompany:company];
+    [self.tableView reloadData];
+}
+
+- (void) updateCompany:(Company *)company {
+    NSLog(@"udateCompany");
+    [[CompanyDAO sharedInstance] updateCompany:company];
+    [self.tableView reloadData];
+}
+
 - (void)dealloc {
+    [self.addButtonItem release];
+    [self.productViewController release];
     [super dealloc];
 }
+
 
 @end

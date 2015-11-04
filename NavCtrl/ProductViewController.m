@@ -8,6 +8,7 @@
 
 #import "ProductViewController.h"
 #import "ProductDetailViewController.h"
+#import "NewProductViewController.h"
 #import "Company.h"
 #import "Product.h"
 #import "CompanyDAO.h"
@@ -15,6 +16,7 @@
 @interface ProductViewController ()
 
 @property (nonatomic, retain) ProductDetailViewController *detailViewController;
+@property (nonatomic, retain) NewProductViewController *addUpdateProductViewController;
 
 @end
 
@@ -32,14 +34,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    _detailViewController = [[ProductDetailViewController alloc] init];
-    
     // Uncomment the following line to preserve selection between presentations.
      self.clearsSelectionOnViewWillAppear = NO;
  
+    UIBarButtonItem *addProductButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(handleAddButton:)];
+    
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.navigationItem.rightBarButtonItems = @[addProductButtonItem, self.editButtonItem];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -82,7 +83,20 @@
     Company *company = [[CompanyDAO sharedInstance] getCompanyByName:self.title];
     Product *product = [company.products objectAtIndex:indexPath.row];
     cell.textLabel.text = product.name;
-    cell.imageView.image = [UIImage imageNamed:company.icon];
+    
+    
+    UIImage *image = [UIImage imageNamed:company.icon];
+    if (!image) {
+        image = [UIImage imageNamed:@"Sunflower.gif"];
+    }
+    [[cell imageView] setImage:image];
+    
+    // Show disclosure and detail acssory buttons
+    // Only show disclosure if URL present
+    if (product.URL && product.URL.length > 0) {
+        [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+    }
+    [cell setEditingAccessoryType:UITableViewCellAccessoryDetailButton];
     
     return cell;
 }
@@ -146,11 +160,49 @@
 
     // Pass the selected object to the new view controller.
     Product *product = [[CompanyDAO sharedInstance] getProductAtIndex:indexPath.row forCompanyName:self.title];
+    
+    if (!self.detailViewController) {
+        self.detailViewController = [[ProductDetailViewController alloc] init];
+    }
     self.detailViewController.title = product.name;
     self.detailViewController.URL = product.URL;
     
     // Push the view controller.
-    [self.navigationController pushViewController:self.detailViewController animated:YES];
+    // Only allow navigation to detail view when URL present
+    if (product.URL && product.URL.length > 0) {
+        [self.navigationController pushViewController:self.detailViewController animated:YES];
+    }
+}
+
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
+    [self createAddUpdateProductViewController];
+    Product *product = [[CompanyDAO sharedInstance] getProductAtIndex:indexPath.row forCompanyName:self.title];
+    self.addUpdateProductViewController.product = product;
+    [self showDetailViewController:self.addUpdateProductViewController.navigationController sender:self];
+}
+
+- (void) handleAddButton:(UIBarButtonItem *)sender {
+    [self createAddUpdateProductViewController];
+    self.addUpdateProductViewController.product = nil;
+    [self showDetailViewController:self.addUpdateProductViewController.navigationController sender:self];
+}
+
+- (void) createAddUpdateProductViewController {
+    if (!self.addUpdateProductViewController) {
+        self.addUpdateProductViewController = [[NewProductViewController alloc] initWithNibName:@"NewProductViewController" bundle:nil];
+        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:self.addUpdateProductViewController];
+        [navController setModalPresentationStyle:UIModalPresentationFormSheet];
+    }
+}
+
+- (void) addProduct:(Product *)product {
+    [[CompanyDAO sharedInstance] addProduct:product forCompanyName:self.title];
+    [self.tableView reloadData];
+}
+
+- (void) updateProduct:(Product *)product {
+    [[CompanyDAO sharedInstance] updateProduct:product forCompanyName:self.title];
+    [self.tableView reloadData];
 }
 
 @end

@@ -22,5 +22,6 @@
 - (void)addProduct:(Product *)product;
 - (void)removeProductAtIndex:(NSUInteger)index;
 - (void)moveProductFromIndex:(NSUInteger)fromIndex toIndex:(NSUInteger)toIndex;
+- (void)updateProduct:(Product *)product;
 
 @end

@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@class Company;
+@class Product;
 
 @interface ProductViewController : UITableViewController
+
+- (void) addProduct:(Product *)product;
+- (void) updateProduct:(Product *)product;
 
 @end

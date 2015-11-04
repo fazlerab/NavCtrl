@@ -49,7 +49,7 @@
 /* ------------------------------------------------------------------------------ */
 
 - (NSArray *) getCompanyList {
-    return _companyList;
+    return [_companyList copy];
 }
 
 - (Company *) getCompanyAtIndex:(NSInteger)index {
@@ -76,6 +76,20 @@
     return c;
 }
 
+- (void) addCompany:(Company *)company {
+    [_companyList addObject:company];
+}
+
+- (void) updateCompany:(Company *)company {
+    for (int i = 0; i < _companyList.count; i++) {
+        Company *c = [_companyList objectAtIndex:i];
+        if ([c isEqual:company]) {
+            [_companyList replaceObjectAtIndex:i withObject:company];
+            break;
+        }
+    }
+}
+
 
 /* ------------------------------------------------------------------------- */
 
@@ -97,6 +111,16 @@
 - (void) moveProductFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex forCompanyName:(NSString *)companyName {
     Company *c = [self getCompanyByName:companyName];
     [c moveProductFromIndex:fromIndex toIndex:toIndex];
+}
+
+- (void) addProduct:(Product *)product forCompanyName:(NSString *)companyName {
+    Company *c = [self getCompanyByName:companyName];
+    [c addProduct:product];
+}
+
+- (void) updateProduct:(Product *)product forCompanyName:(NSString *)companyName {
+    Company *c = [self getCompanyByName:companyName];
+    [c updateProduct:product];
 }
 
 

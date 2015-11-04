@@ -27,6 +27,10 @@
 
 - (void) moveCompanyFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex;
 
+- (void) addCompany:(Company *)company;
+
+- (void) updateCompany:(Company *)company;
+
 
 - (NSArray *) getProductsByCompany:(NSString *)companyName;
 
@@ -35,5 +39,9 @@
 - (void) removeProductAtIndex:(NSInteger)index forCompanyName:(NSString *)companyName;
 
 - (void) moveProductFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex forCompanyName:(NSString *)companyName;
+
+- (void) addProduct:(Product *)product forCompanyName:(NSString *)companyName;
+
+- (void) updateProduct:(Product *)product forCompanyName:(NSString *)companyName;
 
 @end
