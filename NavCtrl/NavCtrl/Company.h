@@ -14,6 +14,7 @@
 
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *icon;
+@property (nonatomic, retain) NSString *stockSymbol;
 @property (nonatomic, retain) NSArray *products;
 
 // Designated Initializer

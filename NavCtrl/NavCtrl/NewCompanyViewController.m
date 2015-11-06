@@ -14,6 +14,7 @@
 
 @property (retain, nonatomic) IBOutlet UITextField *companyNameTextField;
 @property (retain, nonatomic) IBOutlet UITextField *companyLogoTextField;
+@property (retain, nonatomic) IBOutlet UITextField *tickerSymbolTextField;
 
 @end
 
@@ -27,9 +28,6 @@
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(handleSave)];
     [self.navigationItem.rightBarButtonItem setEnabled:YES];
-    
-    [self.companyNameTextField setDelegate:self];
-    [self.companyLogoTextField setDelegate:self];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -37,11 +35,12 @@
         self.title = self.company.name;
         [self.companyNameTextField setText:self.company.name];
         [self.companyLogoTextField setText:self.company.icon];
-        
+        [self.tickerSymbolTextField setText:self.company.stockSymbol];
     } else {
         self.title = @"New Company";
         [self.companyNameTextField setText:@""];
         [self.companyLogoTextField setText:@""];
+        [self.tickerSymbolTextField setText:@""];
     }
     
     [super viewWillAppear:animated];
@@ -57,11 +56,13 @@
 }
 
 - (void) handleSave {
+    NSCharacterSet *spaceCharSet = [NSCharacterSet characterSetWithCharactersInString:@" "];
+
+    // Set company name
     NSString *companyName = [self.companyNameTextField text];
-    companyName = [companyName stringByTrimmingCharactersInSet:
-                   [NSCharacterSet characterSetWithCharactersInString:@" "]];
+    companyName = [companyName stringByTrimmingCharactersInSet:spaceCharSet];
     
-    // validate missing product name
+    // validate missing product name, popup alert if company name is empty
     if ([companyName isEqualToString:@""]) {
         UIAlertController *alert = [UIAlertController  alertControllerWithTitle:@"Missing Company Name"
                                                                         message:@"Please enter a company name"
@@ -77,25 +78,37 @@
         return;
     }
 
+    // Set company ticker symbol
+    NSString *symbol = [self.tickerSymbolTextField text];
+    symbol = [symbol stringByTrimmingCharactersInSet:spaceCharSet];
+    symbol = [symbol uppercaseString];
+    
+    // Set company logo
     NSString *companyLogo = [self.companyLogoTextField text];
     companyLogo = [companyLogo stringByTrimmingCharactersInSet:
                   [NSCharacterSet characterSetWithCharactersInString:@" "]];
     
+    // Update or create new company
     if (self.company) {
         self.company.name = companyName;
         self.company.icon = companyLogo;
+        self.company.stockSymbol = symbol;
+        
         [self.presentingViewController.childViewControllers.lastObject updateCompany:self.company];
     } else {
         self.company = [[Company alloc] initWithName:companyName icon:companyLogo];
+        self.company.stockSymbol = symbol;
         [self.presentingViewController.childViewControllers.lastObject addCompany:self.company];
     }
     
-    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)dealloc {
     [_companyNameTextField release];
     [_companyLogoTextField release];
+    [_tickerSymbolTextField release];
+    [_tickerSymbolTextField release];
     [self.company release];
     [super dealloc];
 }

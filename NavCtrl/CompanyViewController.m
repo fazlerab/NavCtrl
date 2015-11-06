@@ -48,6 +48,11 @@
     self.title = @"Mobile device makers";
 }
 
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self refreshStockQuotes];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -72,8 +77,10 @@
 {
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
+                                      reuseIdentifier:CellIdentifier];
     }
     
     // Configure the cell...
@@ -82,12 +89,20 @@
     [cell setEditingAccessoryType:UITableViewCellAccessoryDetailButton];
 
     Company *company = [[CompanyDAO sharedInstance] getCompanyAtIndex:indexPath.row];
+    
+    // Set company name
     cell.textLabel.text = company.name;
+    
+    // Set company logo
     UIImage *image = [UIImage imageNamed:company.icon];
     if (!image) {
         image = [UIImage imageNamed:@"Sunflower.gif"];
     }
     [[cell imageView] setImage:image];
+    
+    // Set stock price
+    NSString *stockPrice = [[CompanyDAO sharedInstance] getStockQuoteForSymbol:company.stockSymbol];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"Stock Price: %@\t\tTicker Symbol: %@", stockPrice, company.stockSymbol];
     
     return cell;
 }
@@ -99,7 +114,6 @@
     // Return NO if you do not want the specified item to be editable.
     return YES;
 }
-
 
 
 // Override to support editing the table view.
@@ -167,23 +181,30 @@
 }
 
 - (void) handleAddCompany:(UIBarButtonItem *)sender {
-    NSLog(@"handleAddCompany");
+    //NSLog(@"handleAddCompany");
     [self createDetailComanyViewController];
     self.detailCompanyViewController.company = nil;
     [self showDetailViewController:self.detailCompanyViewController.navigationController sender:self];
-    
 }
 
 - (void) addCompany:(Company *)company {
-    NSLog(@"addCompany: %@", company);
+    //NSLog(@"addCompany: %@", company);
     [[CompanyDAO sharedInstance] addCompany:company];
     [self.tableView reloadData];
+    [self refreshStockQuotes];
 }
 
 - (void) updateCompany:(Company *)company {
-    NSLog(@"udateCompany");
+    //NSLog(@"udateCompany");
     [[CompanyDAO sharedInstance] updateCompany:company];
     [self.tableView reloadData];
+    [self refreshStockQuotes];
+}
+
+- (void) refreshStockQuotes {
+    [[CompanyDAO sharedInstance] fetchStockQuotes:^{
+        [self.tableView reloadData];
+    }];
 }
 
 - (void)dealloc {

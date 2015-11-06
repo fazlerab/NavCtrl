@@ -32,6 +32,15 @@
 	<dict>
 		<key>NSExceptionDomains</key>
 		<dict>
+			<key>finance.yahoo.com</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSExceptionMinimumTLSVersion</key>
+				<string>TLSv1.1</string>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+			</dict>
 			<key>lg.com</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>

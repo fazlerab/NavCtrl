@@ -44,4 +44,8 @@
 
 - (void) updateProduct:(Product *)product forCompanyName:(NSString *)companyName;
 
+- (void) fetchStockQuotes:(void(^)(void))fetchDidFinish;
+
+- (NSString *) getStockQuoteForSymbol:(NSString *)symbol;
+
 @end
