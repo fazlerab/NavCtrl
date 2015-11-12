@@ -10,23 +10,26 @@
 #import "CompanyDAO.h"
 #import "Company.h"
 #import "Product.h"
+#import "CompanyDAONSUserDefaults.h"
+#import "CompanyDAOFileArchive.h"
 
 @interface CompanyDAO()
-{
-    NSMutableArray *_companyList;
-    NSURLSession *_session;
-    NSMutableDictionary *_stockQuotes;
-}
+
+@property (nonatomic, retain) NSMutableArray *companyList;
+@property (nonatomic, retain) NSURLSession *session;
+@property (nonatomic, retain) NSMutableDictionary *stockQuotes;
+
 @end
 
 @implementation CompanyDAO
+
 + (CompanyDAO *) sharedInstance {
     static CompanyDAO *sharedInstance = nil;
     
     static dispatch_once_t onceToken;
     
     dispatch_once(&onceToken, ^{
-        sharedInstance = [[self alloc] initPrivate];
+        sharedInstance = [[CompanyDAOFileArchive alloc] init];
     });
     
     return sharedInstance;
@@ -34,16 +37,9 @@
 /* ----------------------------------------------------------------------------- */
 
 - (instancetype) init {
-    [NSException raise:@"Singleton"
-                format:@"Use +[CompanyDAO sharedInstance"];
-    return nil;
-}
-
-- (instancetype) initPrivate {
-    self = [super init];
+    self =  [super init];
     if (self) {
-        _companyList = [[NSMutableArray alloc] init];
-        [self buildCompanyData];
+        _companyList = [[self loadData] mutableCopy];
     }
     return self;
 }
@@ -166,7 +162,7 @@
             
             if (!error && [response.MIMEType isEqualToString:@"text/plain"]) {
                 NSString *dataStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                NSLog(@"data: %@", dataStr);
+                //NSLog(@"fetchStockQuotes data: %@", dataStr);
                 
                 NSArray *csvList = [dataStr componentsSeparatedByString:@"\n"];
                 NSArray *values;
@@ -193,7 +189,7 @@
                 NSLog(@"CompanyDAO.fetchStockQuotes - Error: %@",
                       error ? error.localizedDescription: response.MIMEType);
             }
-            NSLog(@"fetchStockQuotes: Is in mainQueue: %@", [NSThread isMainThread] ? @"YES" : @"NO");
+            //NSLog(@"fetchStockQuotes: Is in mainQueue: %@", [NSThread isMainThread] ? @"YES" : @"NO");
         }];
     [dataTask resume];
 }
@@ -205,7 +201,10 @@
 
 /* ----------------------------------------------------------------------------------------------- */
 
-- (void) buildCompanyData {
+- (NSArray *) loadData {
+    NSLog(@"%@.%@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+
+    NSMutableArray *companies = [[NSMutableArray alloc] init];
     Company *company;
     
     company = [[Company alloc] initWithName:@"Apple mobile devices" icon:@"apple.png"];
@@ -213,7 +212,7 @@
     [company addProduct:[[Product alloc] initWithName:@"iPad Air 2" andURL:@"https://www.apple.com/ipad-air-2/"]];
     [company addProduct:[[Product alloc] initWithName:@"Watch"      andURL:@"https://www.apple.com/watch/"]];
     [company addProduct:[[Product alloc] initWithName:@"iPhone 6S"  andURL:@"https://www.apple.com/iphone-6s/"]];
-    [_companyList addObject:company];
+    [companies addObject:company];
     
     
     company = [[Company alloc] initWithName:@"Samsung mobile devices" icon:@"samsung.png"];
@@ -221,7 +220,7 @@
     [company addProduct:[[Product alloc] initWithName:@"Galaxy S6"   andURL:@"http://www.samsung.com/us/mobile/cell-phones/SM-G928VZDAVZW"]];
     [company addProduct:[[Product alloc] initWithName:@"Galaxy Note" andURL:@"http://www.samsung.com/us/mobile/cell-phones/SM-N920TZKATMB"]];
     [company addProduct:[[Product alloc] initWithName:@"Galaxy Tab"  andURL:@"http://www.samsung.com/us/mobile/galaxy-tab/SM-T810NZWEXAR"]];
-    [_companyList addObject:company];
+    [companies addObject:company];
     
     
     company = [[Company alloc] initWithName:@"Motorola mobile devices" icon:@"motorola.png"];
@@ -229,7 +228,7 @@
     [company addProduct:[[Product alloc] initWithName:@"Moto X" andURL:@"https://www.motorola.com/us/products/moto-x-pure-edition"]];
     [company addProduct:[[Product alloc] initWithName:@"Moto G" andURL:@"https://www.motorola.com/us/products/moto-g"]];
     [company addProduct:[[Product alloc] initWithName:@"Moto E" andURL:@"https://www.motorola.com/us/smartphones/moto-e-2nd-gen/moto-e-2nd-gen.html"]];
-    [_companyList addObject:company];
+    [companies addObject:company];
     
     
     company = [[Company alloc] initWithName:@"LG mobile devices" icon:@"lg.jpg"];
@@ -237,6 +236,13 @@
     [company addProduct:[[Product alloc] initWithName:@"Nexus 5X"     andURL:@"https://www.google.com/nexus/5x/"]];
     [company addProduct:[[Product alloc] initWithName:@"G4"           andURL:@"http://www.lg.com/us/mobile-phones/g4"]];
     [company addProduct:[[Product alloc] initWithName:@"G Pad X 10.1" andURL:@"http://www.lg.com/us/tablets/lg-V930-g-pad-x-10.1"]];
-    [_companyList addObject:company];
+    [companies addObject:company];
+    
+    return companies;
 }
+
+- (void) saveData {
+    NSLog(@"%@.%@ - Error: saveData not implemented.", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+}
+
 @end

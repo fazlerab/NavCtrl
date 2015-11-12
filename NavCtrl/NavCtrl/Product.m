@@ -24,5 +24,15 @@
     return self;
 }
 
+- (instancetype)initWithCoder:(NSCoder *)decoder {
+    NSString *name = [decoder decodeObjectForKey:@"name"];
+    NSString *URL  = [decoder decodeObjectForKey:@"URL"];
+    return  [self initWithName:name andURL:URL];
+}
+
+- (void)encodeWithCoder:(NSCoder *)encoder {
+    [encoder encodeObject:self.name forKey:@"name"];
+    [encoder encodeObject:self.URL  forKey:@"URL"];
+}
 
 @end

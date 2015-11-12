@@ -15,7 +15,8 @@
 
 + (CompanyDAO *) sharedInstance;
 
-
+- (NSArray *) loadData;
+- (void) saveData;
 
 - (NSArray *) getCompanyList;
 
@@ -43,6 +44,7 @@
 - (void) addProduct:(Product *)product forCompanyName:(NSString *)companyName;
 
 - (void) updateProduct:(Product *)product forCompanyName:(NSString *)companyName;
+
 
 - (void) fetchStockQuotes:(void(^)(void))fetchDidFinish;
 

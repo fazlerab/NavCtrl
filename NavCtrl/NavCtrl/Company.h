@@ -10,7 +10,7 @@
 
 @class Product;
 
-@interface Company : NSObject
+@interface Company : NSObject <NSCoding>
 
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *icon;

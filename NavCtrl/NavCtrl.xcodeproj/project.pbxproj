@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1D18AA911BF2679000AA1BC1 /* CompanyDAONSUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D18AA901BF2679000AA1BC1 /* CompanyDAONSUserDefaults.m */; };
+		1D18AA941BF2AE3100AA1BC1 /* CompanyDAOFileArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D18AA931BF2AE3100AA1BC1 /* CompanyDAOFileArchive.m */; };
 		1D68582D1BE94AE000BB0F42 /* NewProductViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D68582B1BE94AE000BB0F42 /* NewProductViewController.m */; };
 		1D68582E1BE94AE000BB0F42 /* NewProductViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1D68582C1BE94AE000BB0F42 /* NewProductViewController.xib */; };
 		1D6BF9841BDF215C0035A30E /* ProductDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D6BF9831BDF215C0035A30E /* ProductDetailViewController.m */; };
@@ -49,6 +51,10 @@
 
 /* Begin PBXFileReference section */
 		1D0A942C1BE2B1E000599B4D /* CompanyDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompanyDAO.h; sourceTree = "<group>"; };
+		1D18AA8F1BF2678F00AA1BC1 /* CompanyDAONSUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompanyDAONSUserDefaults.h; sourceTree = "<group>"; };
+		1D18AA901BF2679000AA1BC1 /* CompanyDAONSUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompanyDAONSUserDefaults.m; sourceTree = "<group>"; };
+		1D18AA921BF2AE3100AA1BC1 /* CompanyDAOFileArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompanyDAOFileArchive.h; sourceTree = "<group>"; };
+		1D18AA931BF2AE3100AA1BC1 /* CompanyDAOFileArchive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompanyDAOFileArchive.m; sourceTree = "<group>"; };
 		1D68582A1BE94AE000BB0F42 /* NewProductViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewProductViewController.h; sourceTree = "<group>"; };
 		1D68582B1BE94AE000BB0F42 /* NewProductViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewProductViewController.m; sourceTree = "<group>"; };
 		1D68582C1BE94AE000BB0F42 /* NewProductViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewProductViewController.xib; sourceTree = "<group>"; };
@@ -119,6 +125,10 @@
 			children = (
 				1D0A942C1BE2B1E000599B4D /* CompanyDAO.h */,
 				1D88552A1BE7B913008A88C1 /* CompanyDAO.m */,
+				1D18AA8F1BF2678F00AA1BC1 /* CompanyDAONSUserDefaults.h */,
+				1D18AA901BF2679000AA1BC1 /* CompanyDAONSUserDefaults.m */,
+				1D18AA921BF2AE3100AA1BC1 /* CompanyDAOFileArchive.h */,
+				1D18AA931BF2AE3100AA1BC1 /* CompanyDAOFileArchive.m */,
 				1DA085E21BE18177008EF141 /* Company.h */,
 				1DA085E31BE18177008EF141 /* Company.m */,
 				1DA085E51BE181AE008EF141 /* Product.h */,
@@ -358,9 +368,11 @@
 				1DA085E41BE18177008EF141 /* Company.m in Sources */,
 				1D6BF9841BDF215C0035A30E /* ProductDetailViewController.m in Sources */,
 				1D68582D1BE94AE000BB0F42 /* NewProductViewController.m in Sources */,
+				1D18AA911BF2679000AA1BC1 /* CompanyDAONSUserDefaults.m in Sources */,
 				48A656C518163BF200746D36 /* NavControllerAppDelegate.m in Sources */,
 				48A656C118163BF200746D36 /* main.m in Sources */,
 				1D88552F1BE81BA4008A88C1 /* NewCompanyViewController.m in Sources */,
+				1D18AA941BF2AE3100AA1BC1 /* CompanyDAOFileArchive.m in Sources */,
 				48A656EB18163F8700746D36 /* ProductViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
