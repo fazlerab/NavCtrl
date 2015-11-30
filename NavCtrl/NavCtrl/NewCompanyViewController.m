@@ -96,7 +96,7 @@
         
         [self.presentingViewController.childViewControllers.lastObject updateCompany:self.company];
     } else {
-        self.company = [[Company alloc] initWithName:companyName icon:companyLogo];
+        _company = [[Company alloc] initWithName:companyName icon:companyLogo];
         self.company.stockSymbol = symbol;
         [self.presentingViewController.childViewControllers.lastObject addCompany:self.company];
     }
@@ -109,7 +109,7 @@
     [_companyLogoTextField release];
     [_tickerSymbolTextField release];
     [_tickerSymbolTextField release];
-    [self.company release];
+    [_company release];
     [super dealloc];
 }
 

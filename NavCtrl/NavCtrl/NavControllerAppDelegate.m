@@ -16,14 +16,14 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
-    CompanyViewController *companyViewController = [[CompanyViewController alloc]
-                                               initWithNibName:@"CompanyViewController" bundle:nil];
+    CompanyViewController *companyViewController = [[[CompanyViewController alloc]
+                                               initWithNibName:@"CompanyViewController" bundle:nil] autorelease];
 
-    self.navigationController = [[UINavigationController alloc]
-                                 initWithRootViewController:companyViewController];
+    self.navigationController = [[[UINavigationController alloc]
+                                 initWithRootViewController:companyViewController] autorelease];
     
-    self.window = [[UIWindow alloc]
-                   initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window = [[[UIWindow alloc]
+                   initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     
 //  self.window addSubview:self.navigationController.view];
     [self.window setRootViewController:self.navigationController];

@@ -12,13 +12,17 @@
 
 @interface Company : NSObject
 
+@property (nonatomic) NSUInteger id;
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *icon;
 @property (nonatomic, retain) NSString *stockSymbol;
-@property (nonatomic, retain) NSArray *products;
+@property (nonatomic, retain) NSArray<Product *> *products;
+@property (nonatomic) NSUInteger listOrder;
 
+- (instancetype) initWithName:(NSString *)name icon:(NSString *)icon;
+- (instancetype) initWithName:(NSString *)name icon:(NSString *)icon stockSymbol:(NSString *)symbol;
 // Designated Initializer
-- (instancetype) initWithName:(NSString *)name icon:(NSString *)icon NS_DESIGNATED_INITIALIZER;
+- (instancetype) initWithId:(NSUInteger)id name:(NSString *)name icon:(NSString *)icon stockSymbol:(NSString *)symbol listOrder:(NSUInteger)listOrder NS_DESIGNATED_INITIALIZER;
 
 - (void)addProduct:(Product *)product;
 - (void)removeProductAtIndex:(NSUInteger)index;

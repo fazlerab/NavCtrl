@@ -10,6 +10,9 @@
 		1D68582D1BE94AE000BB0F42 /* NewProductViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D68582B1BE94AE000BB0F42 /* NewProductViewController.m */; };
 		1D68582E1BE94AE000BB0F42 /* NewProductViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1D68582C1BE94AE000BB0F42 /* NewProductViewController.xib */; };
 		1D6BF9841BDF215C0035A30E /* ProductDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D6BF9831BDF215C0035A30E /* ProductDetailViewController.m */; };
+		1D7C84771BFD133A00246776 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D7C84761BFD133A00246776 /* libsqlite3.tbd */; };
+		1D7C847C1BFD155200246776 /* DBSqliteCompanyDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D7C847B1BFD155200246776 /* DBSqliteCompanyDAO.m */; };
+		1D7C847E1BFD186F00246776 /* navctrl.db in Resources */ = {isa = PBXBuildFile; fileRef = 1D7C847D1BFD186F00246776 /* navctrl.db */; };
 		1D88552B1BE7B913008A88C1 /* CompanyDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D88552A1BE7B913008A88C1 /* CompanyDAO.m */; };
 		1D88552F1BE81BA4008A88C1 /* NewCompanyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D88552D1BE81BA4008A88C1 /* NewCompanyViewController.m */; };
 		1D8855301BE81BA4008A88C1 /* NewCompanyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1D88552E1BE81BA4008A88C1 /* NewCompanyViewController.xib */; };
@@ -54,6 +57,11 @@
 		1D68582C1BE94AE000BB0F42 /* NewProductViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewProductViewController.xib; sourceTree = "<group>"; };
 		1D6BF9821BDF215C0035A30E /* ProductDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductDetailViewController.h; path = ../ProductDetailViewController.h; sourceTree = "<group>"; };
 		1D6BF9831BDF215C0035A30E /* ProductDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductDetailViewController.m; path = ../ProductDetailViewController.m; sourceTree = "<group>"; };
+		1D7C84741BFD03E400246776 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
+		1D7C84761BFD133A00246776 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		1D7C847A1BFD155200246776 /* DBSqliteCompanyDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBSqliteCompanyDAO.h; sourceTree = "<group>"; };
+		1D7C847B1BFD155200246776 /* DBSqliteCompanyDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBSqliteCompanyDAO.m; sourceTree = "<group>"; };
+		1D7C847D1BFD186F00246776 /* navctrl.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = navctrl.db; sourceTree = "<group>"; };
 		1D88552A1BE7B913008A88C1 /* CompanyDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompanyDAO.m; sourceTree = "<group>"; };
 		1D88552C1BE81BA4008A88C1 /* NewCompanyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewCompanyViewController.h; sourceTree = "<group>"; };
 		1D88552D1BE81BA4008A88C1 /* NewCompanyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewCompanyViewController.m; sourceTree = "<group>"; };
@@ -95,6 +103,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1D7C84771BFD133A00246776 /* libsqlite3.tbd in Frameworks */,
 				48A656B718163BF200746D36 /* CoreGraphics.framework in Frameworks */,
 				48A656B918163BF200746D36 /* UIKit.framework in Frameworks */,
 				48A656B518163BF200746D36 /* Foundation.framework in Frameworks */,
@@ -119,6 +128,8 @@
 			children = (
 				1D0A942C1BE2B1E000599B4D /* CompanyDAO.h */,
 				1D88552A1BE7B913008A88C1 /* CompanyDAO.m */,
+				1D7C847A1BFD155200246776 /* DBSqliteCompanyDAO.h */,
+				1D7C847B1BFD155200246776 /* DBSqliteCompanyDAO.m */,
 				1DA085E21BE18177008EF141 /* Company.h */,
 				1DA085E31BE18177008EF141 /* Company.m */,
 				1DA085E51BE181AE008EF141 /* Product.h */,
@@ -192,6 +203,8 @@
 		48A656B318163BF200746D36 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1D7C84761BFD133A00246776 /* libsqlite3.tbd */,
+				1D7C84741BFD03E400246776 /* libsqlite3.0.tbd */,
 				48A656B418163BF200746D36 /* Foundation.framework */,
 				48A656B618163BF200746D36 /* CoreGraphics.framework */,
 				48A656B818163BF200746D36 /* UIKit.framework */,
@@ -226,6 +239,7 @@
 				48A656BD18163BF200746D36 /* InfoPlist.strings */,
 				48A656C018163BF200746D36 /* main.m */,
 				48A656C218163BF200746D36 /* NavCtrl-Prefix.pch */,
+				1D7C847D1BFD186F00246776 /* navctrl.db */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -326,6 +340,7 @@
 			files = (
 				1DF5A03A1BDE881900B51945 /* lg.jpg in Resources */,
 				48A656EE1816468000746D36 /* Sunflower.gif in Resources */,
+				1D7C847E1BFD186F00246776 /* navctrl.db in Resources */,
 				48A656E718163C1B00746D36 /* CompanyViewController.xib in Resources */,
 				1DF5A0421BDE8E0D00B51945 /* motorola.png in Resources */,
 				1DF5A03E1BDE8C0600B51945 /* samsung.png in Resources */,
@@ -360,6 +375,7 @@
 				1D68582D1BE94AE000BB0F42 /* NewProductViewController.m in Sources */,
 				48A656C518163BF200746D36 /* NavControllerAppDelegate.m in Sources */,
 				48A656C118163BF200746D36 /* main.m in Sources */,
+				1D7C847C1BFD155200246776 /* DBSqliteCompanyDAO.m in Sources */,
 				1D88552F1BE81BA4008A88C1 /* NewCompanyViewController.m in Sources */,
 				48A656EB18163F8700746D36 /* ProductViewController.m in Sources */,
 			);

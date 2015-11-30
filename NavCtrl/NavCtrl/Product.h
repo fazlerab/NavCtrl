@@ -10,10 +10,15 @@
 
 @interface Product : NSObject
 
+@property (nonatomic) NSUInteger id;
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *URL;
+@property (nonatomic) NSUInteger companyId;
+@property (nonatomic) NSUInteger listOrder;
+
+- (instancetype) initWithName:(NSString *)name andURL:(NSString *)URL;
 
 // Designated Initializer
-- (instancetype) initWithName:(NSString *)name andURL:(NSString *)URL NS_DESIGNATED_INITIALIZER;
+- (instancetype) initWithId:(NSUInteger)id name:(NSString *)name URL:(NSString *)URL companyId:(NSUInteger)companyId listOrder:(NSUInteger)listOrder NS_DESIGNATED_INITIALIZER;
 
 @end

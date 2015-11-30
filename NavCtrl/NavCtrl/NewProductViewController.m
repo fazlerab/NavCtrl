@@ -78,7 +78,7 @@
                   [NSCharacterSet characterSetWithCharactersInString:@" "]];
     
     if (!self.product) {
-        self.product = [[Product alloc] initWithName:productName andURL:productURL];
+        _product = [[Product alloc] initWithName:productName andURL:productURL];
         [self.presentingViewController.childViewControllers.lastObject addProduct:self.product];
     } else {
         self.product.name = productName;
@@ -92,7 +92,7 @@
 - (void)dealloc {
     [_productNameTextField release];
     [_productURLTextField release];
-    [self.product release];
+    [_product release];
     [super dealloc];
 }
 @end

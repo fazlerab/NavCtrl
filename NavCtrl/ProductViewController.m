@@ -17,6 +17,7 @@
 
 @property (nonatomic, retain) ProductDetailViewController *detailViewController;
 @property (nonatomic, retain) NewProductViewController *addUpdateProductViewController;
+@property (nonatomic, retain) UINavigationController *addUpdateViewNavController;
 
 @end
 
@@ -46,7 +47,9 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self.tableView reloadData];
+    [[CompanyDAO sharedInstance] loadProductsForCompany:self.title completionBlock:^{
+        [self.tableView reloadData];
+    }];
 }
 
 - (void)didReceiveMemoryWarning
@@ -76,7 +79,7 @@
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     // Configure the cell...
     
@@ -162,7 +165,7 @@
     Product *product = [[CompanyDAO sharedInstance] getProductAtIndex:indexPath.row forCompanyName:self.title];
     
     if (!self.detailViewController) {
-        self.detailViewController = [[ProductDetailViewController alloc] init];
+        _detailViewController = [[ProductDetailViewController alloc] init];
     }
     self.detailViewController.title = product.name;
     self.detailViewController.URL = product.URL;
@@ -189,20 +192,29 @@
 
 - (void) createAddUpdateProductViewController {
     if (!self.addUpdateProductViewController) {
-        self.addUpdateProductViewController = [[NewProductViewController alloc] initWithNibName:@"NewProductViewController" bundle:nil];
-        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:self.addUpdateProductViewController];
-        [navController setModalPresentationStyle:UIModalPresentationFormSheet];
+        _addUpdateProductViewController = [[NewProductViewController alloc] initWithNibName:@"NewProductViewController" bundle:nil];
+        _addUpdateViewNavController = [[UINavigationController alloc] initWithRootViewController:self.addUpdateProductViewController];
+        [self.addUpdateViewNavController setModalPresentationStyle:UIModalPresentationFormSheet];
     }
 }
 
 - (void) addProduct:(Product *)product {
-    [[CompanyDAO sharedInstance] addProduct:product forCompanyName:self.title];
-    [self.tableView reloadData];
+    [[CompanyDAO sharedInstance] addProduct: product
+                             forCompanyName: self.title
+                            completionBlock: ^{ [self.tableView reloadData]; }];
 }
 
 - (void) updateProduct:(Product *)product {
-    [[CompanyDAO sharedInstance] updateProduct:product forCompanyName:self.title];
-    [self.tableView reloadData];
+    [[CompanyDAO sharedInstance] updateProduct:product
+                                forCompanyName:self.title
+                               completionBlock:^{ [self.tableView reloadData]; }];
+}
+
+- (void) dealloc {
+    [_detailViewController release];
+    [_addUpdateProductViewController release];
+    [_addUpdateViewNavController release];
+    [super dealloc];
 }
 
 @end

@@ -22,6 +22,9 @@
                                             configuration:webViewConfig];
     webView.navigationDelegate = self;
     [super setView:webView];
+    
+    [webViewConfig release];
+    [webView release];
 }
 
 - (void)viewDidLoad {

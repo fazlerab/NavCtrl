@@ -15,9 +15,15 @@
 
 + (CompanyDAO *) sharedInstance;
 
+- (void) loadCompanyList:(void(^)(void))completionBlock;
 
+- (void) addCompany:(Company *)company completionBlock:(void(^)(void))completionBlock;
 
-- (NSArray *) getCompanyList;
+- (void) updateCompany:(Company *)company completionBlock:(void(^)(void))completionBlock;
+
+- (NSArray<Company *> *) getCompanyList;
+
+- (void) setCompanyList:(NSArray<Company *> *)companyList;
 
 - (Company *) getCompanyAtIndex:(NSInteger)index;
 
@@ -27,10 +33,12 @@
 
 - (void) moveCompanyFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex;
 
-- (void) addCompany:(Company *)company;
 
-- (void) updateCompany:(Company *)company;
+- (void) loadProductsForCompany:(NSString *)companyName completionBlock:(void(^)(void))completionBlock;
 
+- (void) addProduct:(Product *)product forCompanyName:(NSString *)companyName completionBlock:(void(^)(void))completionBlock;
+
+- (void) updateProduct:(Product *)product forCompanyName:(NSString *)companyName completionBlock:(void(^)(void))completionBlock;
 
 - (NSArray *) getProductsByCompany:(NSString *)companyName;
 
@@ -39,10 +47,6 @@
 - (void) removeProductAtIndex:(NSInteger)index forCompanyName:(NSString *)companyName;
 
 - (void) moveProductFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex forCompanyName:(NSString *)companyName;
-
-- (void) addProduct:(Product *)product forCompanyName:(NSString *)companyName;
-
-- (void) updateProduct:(Product *)product forCompanyName:(NSString *)companyName;
 
 - (void) fetchStockQuotes:(void(^)(void))fetchDidFinish;
 

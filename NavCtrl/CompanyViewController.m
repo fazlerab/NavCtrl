@@ -17,6 +17,7 @@
 
 @property (nonatomic, retain) UIBarButtonItem *addButtonItem;
 @property (nonatomic, retain) NewCompanyViewController *detailCompanyViewController;
+@property (nonatomic, retain) UINavigationController *detailViewNavController;
 
 @end
 
@@ -46,6 +47,11 @@
     self.navigationItem.rightBarButtonItems = @[self.addButtonItem, self.editButtonItem];
     
     self.title = @"Mobile device makers";
+    
+    [[CompanyDAO sharedInstance] loadCompanyList:^{
+        [self.tableView reloadData];
+        [self refreshStockQuotes];
+    }];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -79,8 +85,8 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
-                                      reuseIdentifier:CellIdentifier];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
+                                      reuseIdentifier:CellIdentifier] autorelease];
     }
     
     // Configure the cell...
@@ -102,7 +108,8 @@
     
     // Set stock price
     NSString *stockPrice = [[CompanyDAO sharedInstance] getStockQuoteForSymbol:company.stockSymbol];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"Stock Price: %@\t\tTicker Symbol: %@", stockPrice, company.stockSymbol];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"Stock Price: %@\t\tTicker Symbol: %@",
+                                 stockPrice ? stockPrice : @"?", company.stockSymbol];
     
     return cell;
 }
@@ -172,11 +179,9 @@
 
 - (void) createDetailComanyViewController {
     if (!self.detailCompanyViewController) {
-        self.detailCompanyViewController = [[NewCompanyViewController alloc] initWithNibName:@"NewCompanyViewController" bundle:nil];
-        
-        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:self.detailCompanyViewController];
-        
-        navController.modalPresentationStyle = UIModalPresentationFormSheet;
+        _detailCompanyViewController = [[NewCompanyViewController alloc] initWithNibName:@"NewCompanyViewController" bundle:nil];
+        _detailViewNavController = [[UINavigationController alloc] initWithRootViewController:self.detailCompanyViewController];
+        self.detailViewNavController.modalPresentationStyle = UIModalPresentationFormSheet;
     }
 }
 
@@ -189,16 +194,18 @@
 
 - (void) addCompany:(Company *)company {
     //NSLog(@"addCompany: %@", company);
-    [[CompanyDAO sharedInstance] addCompany:company];
-    [self.tableView reloadData];
-    [self refreshStockQuotes];
+    [[CompanyDAO sharedInstance] addCompany:company completionBlock:^{
+        [self.tableView reloadData];
+        [self refreshStockQuotes];
+    }];
 }
 
 - (void) updateCompany:(Company *)company {
     //NSLog(@"udateCompany");
-    [[CompanyDAO sharedInstance] updateCompany:company];
-    [self.tableView reloadData];
-    [self refreshStockQuotes];
+    [[CompanyDAO sharedInstance] updateCompany:company completionBlock:^{
+        [self.tableView reloadData];
+        [self refreshStockQuotes];
+    }];
 }
 
 - (void) refreshStockQuotes {
@@ -208,8 +215,10 @@
 }
 
 - (void)dealloc {
-    [self.addButtonItem release];
-    [self.productViewController release];
+    [_addButtonItem release];
+    [_productViewController release];
+    [_detailCompanyViewController release];
+    [_detailViewNavController release];
     [super dealloc];
 }
 
