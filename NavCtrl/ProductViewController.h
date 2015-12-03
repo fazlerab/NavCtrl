@@ -9,8 +9,11 @@
 #import <UIKit/UIKit.h>
 
 @class Product;
+@class Company;
 
 @interface ProductViewController : UITableViewController
+
+@property (nonatomic, retain) Company *company;
 
 - (void) addProduct:(Product *)product;
 - (void) updateProduct:(Product *)product;

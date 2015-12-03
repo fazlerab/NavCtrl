@@ -7,13 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CompanyDAO.h"
+//#import "NavCtrlDAO.h"
+#import "CoreDataDAO.h"
 #import "Company.h"
 #import "Product.h"
-#import <sqlite3.h>
-#import "DBSqliteCompanyDAO.h"
 
-@interface CompanyDAO() {
+@interface NavCtrlDAO() {
     NSURLSession *_session;
 }
 @property (nonatomic, retain) NSMutableArray<Company *> *companies;
@@ -21,14 +20,14 @@
 
 @end
 
-@implementation CompanyDAO
-+ (CompanyDAO *) sharedInstance {
-    static CompanyDAO *sharedInstance = nil;
+@implementation NavCtrlDAO
++ (NavCtrlDAO *) sharedInstance {
+    static NavCtrlDAO *sharedInstance = nil;
     
     static dispatch_once_t onceToken;
     
     dispatch_once(&onceToken, ^{
-        sharedInstance = [[DBSqliteCompanyDAO alloc] init];
+        sharedInstance = [[CoreDataDAO alloc] init];
     });
     
     return sharedInstance;
@@ -51,9 +50,13 @@
     completionBlock();
 }
 
+- (Company *) newCompany {
+    return nil;
+}
+
 - (void) addCompany:(Company *)company completionBlock:(void (^)(void))completionBlock {
     [self.companies addObject:company];
-    completionBlock();
+    if (completionBlock) completionBlock();
 }
 
 - (void) updateCompany:(Company *)company completionBlock:(void (^)(void))completionBlock {
@@ -133,6 +136,10 @@
     // Only used by subclasses.
 }
 
+- (Product *) newProductForCompany: (Company *)company {
+    return nil;
+}
+
 - (void) addProduct:(Product *)product forCompanyName:(NSString *)companyName completionBlock:(void(^)(void))completionBlock {
     Company *c = [self getCompanyByName:companyName];
     [c addProduct:product];
@@ -140,14 +147,15 @@
 }
 
 - (void) updateProduct:(Product *)product forCompanyName:(NSString *)companyName completionBlock:(void (^)(void))completionBlock {
-    Company *c = [self getCompanyByName:companyName];
-    [c updateProduct:product];
-    completionBlock();
+//    Company *c = [self getCompanyByName:companyName];
+//    [c updateProduct:product];
+//    completionBlock();
 }
 
 - (NSArray *) getProductsByCompany:(NSString *)companyName {
-    Company *c = [self getCompanyByName:companyName];
-    return c.products;
+//    Company *c = [self getCompanyByName:companyName];
+//    return c.products;
+    return nil;
 }
 
 - (Product *) getProductAtIndex:(NSInteger)index forCompanyName:(NSString *)companyName {
@@ -156,16 +164,16 @@
 }
 
 - (void) removeProductAtIndex:(NSInteger)index forCompanyName:(NSString *)companyName {
-    Company *c = [self getCompanyByName:companyName];
-    [c removeProductAtIndex:index];
-    for(NSUInteger i = index; i < c.products.count; i++) {
-        c.products[i].listOrder--;
-    }
+//    Company *c = [self getCompanyByName:companyName];
+//    [c removeProductAtIndex:index];
+//    for(NSUInteger i = index; i < c.products.count; i++) {
+//        c.products[i].listOrder--;
+//    }
 }
 
 - (void) moveProductFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex forCompanyName:(NSString *)companyName {
-    Company *c = [self getCompanyByName:companyName];
-    [c moveProductFromIndex:fromIndex toIndex:toIndex];
+//    Company *c = [self getCompanyByName:companyName];
+//    [c moveProductFromIndex:fromIndex toIndex:toIndex];
 }
 
 
@@ -254,6 +262,7 @@
 /* ----------------------------------------------------------------------------------------------- */
 
 - (void) loadData {
+    /*
     @autoreleasepool {
         Company *company;
         
@@ -288,6 +297,7 @@
         [company addProduct:[[[Product alloc] initWithName:@"G Pad X 10.1" andURL:@"http://www.lg.com/us/tablets/lg-V930-g-pad-x-10.1"] autorelease]];
         [self.companies addObject:company];
     }
+     */
 }
 
 - (void) dealloc {

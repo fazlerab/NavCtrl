@@ -9,6 +9,7 @@
 #import "NewProductViewController.h"
 #import "ProductViewController.h"
 #import "Product.h"
+#import "NavCtrlDAO.h"
 
 @interface NewProductViewController () <UITextFieldDelegate>
 
@@ -32,7 +33,7 @@
     if (self.product) {
         self.title = self.product.name;
         [self.productNameTextField setText:self.product.name];
-        [self.productURLTextField setText:self.product.URL];
+        [self.productURLTextField setText:self.product.url];
     } else {
         self.title = @"New Product";
         [self.productNameTextField setText:@""];
@@ -77,12 +78,16 @@
     productURL = [productURL stringByTrimmingCharactersInSet:
                   [NSCharacterSet characterSetWithCharactersInString:@" "]];
     
-    if (!self.product) {
-        _product = [[Product alloc] initWithName:productName andURL:productURL];
+    if (self.product.isInserted) {
+        self.product.name = productName;
+        self.product.url = productURL;
+        
         [self.presentingViewController.childViewControllers.lastObject addProduct:self.product];
+        
     } else {
         self.product.name = productName;
-        self.product.URL = productURL;
+        self.product.url = productURL;
+        
         [self.presentingViewController.childViewControllers.lastObject updateProduct:self.product];
     }
     

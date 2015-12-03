@@ -8,8 +8,7 @@
 
 #import "NavControllerAppDelegate.h"
 #import "CompanyViewController.h"
-#import "Company.h"
-#import "Product.h"
+#import "NavCtrlDAO.h"
 
 @implementation NavControllerAppDelegate
 
@@ -24,6 +23,9 @@
     
     self.window = [[[UIWindow alloc]
                    initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+    
+    // Initialize NavCtrlDAO
+    [NavCtrlDAO sharedInstance];
     
 //  self.window addSubview:self.navigationController.view];
     [self.window setRootViewController:self.navigationController];

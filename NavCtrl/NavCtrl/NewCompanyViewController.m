@@ -6,6 +6,7 @@
 //  Copyright © 2015 Aditya Narayan. All rights reserved.
 //
 
+#import "NavCtrlDAO.h"
 #import "NewCompanyViewController.h"
 #import "CompanyViewController.h"
 #import "Company.h"
@@ -94,11 +95,17 @@
         self.company.icon = companyLogo;
         self.company.stockSymbol = symbol;
         
-        [self.presentingViewController.childViewControllers.lastObject updateCompany:self.company];
+        [[NavCtrlDAO sharedInstance] updateCompany:self.company completionBlock:self.completionHandler];
+        
     } else {
-        _company = [[Company alloc] initWithName:companyName icon:companyLogo];
+        _company = [[NavCtrlDAO sharedInstance] newCompany];
+
+        self.company.name = companyName;
+        self.company.icon = companyLogo;
         self.company.stockSymbol = symbol;
-        [self.presentingViewController.childViewControllers.lastObject addCompany:self.company];
+        
+        [[NavCtrlDAO sharedInstance] addCompany:self.company completionBlock:self.completionHandler];
+        
     }
     
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
@@ -110,6 +117,7 @@
     [_tickerSymbolTextField release];
     [_tickerSymbolTextField release];
     [_company release];
+    [_completionHandler release];
     [super dealloc];
 }
 

@@ -2,23 +2,24 @@
 //  Product.h
 //  NavCtrl
 //
-//  Created by Imran on 10/28/15.
+//  Created by Imran on 11/30/15.
 //  Copyright © 2015 Aditya Narayan. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
-@interface Product : NSObject
+@class Company;
 
-@property (nonatomic) NSUInteger id;
-@property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSString *URL;
-@property (nonatomic) NSUInteger companyId;
-@property (nonatomic) NSUInteger listOrder;
+NS_ASSUME_NONNULL_BEGIN
 
-- (instancetype) initWithName:(NSString *)name andURL:(NSString *)URL;
+@interface Product : NSManagedObject
 
-// Designated Initializer
-- (instancetype) initWithId:(NSUInteger)id name:(NSString *)name URL:(NSString *)URL companyId:(NSUInteger)companyId listOrder:(NSUInteger)listOrder NS_DESIGNATED_INITIALIZER;
+// Insert code here to declare functionality of your managed object subclass
++ (NSString *) entityName;
 
 @end
+
+NS_ASSUME_NONNULL_END
+
+#import "Product+CoreDataProperties.h"

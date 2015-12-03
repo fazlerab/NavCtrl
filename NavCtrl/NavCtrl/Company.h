@@ -2,31 +2,27 @@
 //  Company.h
 //  NavCtrl
 //
-//  Created by Imran on 10/28/15.
+//  Created by Imran on 11/30/15.
 //  Copyright © 2015 Aditya Narayan. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
 @class Product;
 
-@interface Company : NSObject
+NS_ASSUME_NONNULL_BEGIN
 
-@property (nonatomic) NSUInteger id;
-@property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSString *icon;
-@property (nonatomic, retain) NSString *stockSymbol;
-@property (nonatomic, retain) NSArray<Product *> *products;
-@property (nonatomic) NSUInteger listOrder;
+@interface Company : NSManagedObject
 
-- (instancetype) initWithName:(NSString *)name icon:(NSString *)icon;
-- (instancetype) initWithName:(NSString *)name icon:(NSString *)icon stockSymbol:(NSString *)symbol;
-// Designated Initializer
-- (instancetype) initWithId:(NSUInteger)id name:(NSString *)name icon:(NSString *)icon stockSymbol:(NSString *)symbol listOrder:(NSUInteger)listOrder NS_DESIGNATED_INITIALIZER;
+// Insert code here to declare functionality of your managed object subclass
++ (NSString *) entityName;
 
 - (void)addProduct:(Product *)product;
-- (void)removeProductAtIndex:(NSUInteger)index;
-- (void)moveProductFromIndex:(NSUInteger)fromIndex toIndex:(NSUInteger)toIndex;
-- (void)updateProduct:(Product *)product;
+- (void)removeProduct:(Product *)product;
 
 @end
+
+NS_ASSUME_NONNULL_END
+
+#import "Company+CoreDataProperties.h"

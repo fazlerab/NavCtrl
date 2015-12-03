@@ -11,11 +11,13 @@
 @class Company;
 @class Product;
 
-@interface CompanyDAO : NSObject
+@interface NavCtrlDAO : NSObject
 
-+ (CompanyDAO *) sharedInstance;
++ (NavCtrlDAO *) sharedInstance;
 
 - (void) loadCompanyList:(void(^)(void))completionBlock;
+
+- (Company *) newCompany;
 
 - (void) addCompany:(Company *)company completionBlock:(void(^)(void))completionBlock;
 
@@ -35,6 +37,8 @@
 
 
 - (void) loadProductsForCompany:(NSString *)companyName completionBlock:(void(^)(void))completionBlock;
+
+- (Product *) newProductForCompany: (Company *)company;
 
 - (void) addProduct:(Product *)product forCompanyName:(NSString *)companyName completionBlock:(void(^)(void))completionBlock;
 

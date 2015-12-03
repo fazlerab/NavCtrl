@@ -13,5 +13,6 @@
 @interface NewCompanyViewController : UIViewController
 
 @property (nonatomic, retain) Company *company;
+@property (nonatomic, copy) void(^completionHandler)(void);
 
 @end

@@ -9,7 +9,7 @@
 #import "CompanyViewController.h"
 #import "ProductViewController.h"
 #import "NewCompanyViewController.h"
-#import "CompanyDAO.h"
+#import "NavCtrlDAO.h"
 #import "Company.h"
 #import "Product.h"
 
@@ -48,7 +48,7 @@
     
     self.title = @"Mobile device makers";
     
-    [[CompanyDAO sharedInstance] loadCompanyList:^{
+    [[NavCtrlDAO sharedInstance] loadCompanyList:^{
         [self.tableView reloadData];
         [self refreshStockQuotes];
     }];
@@ -65,6 +65,7 @@
     // Dispose of any resources that can be recreated.
 }
 
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -76,7 +77,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [[[CompanyDAO sharedInstance] getCompanyList] count];
+    return [[[NavCtrlDAO sharedInstance] getCompanyList] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -94,8 +95,8 @@
     [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
     [cell setEditingAccessoryType:UITableViewCellAccessoryDetailButton];
 
-    Company *company = [[CompanyDAO sharedInstance] getCompanyAtIndex:indexPath.row];
-    
+    Company *company = [[NavCtrlDAO sharedInstance] getCompanyAtIndex:indexPath.row];
+        
     // Set company name
     cell.textLabel.text = company.name;
     
@@ -107,7 +108,7 @@
     [[cell imageView] setImage:image];
     
     // Set stock price
-    NSString *stockPrice = [[CompanyDAO sharedInstance] getStockQuoteForSymbol:company.stockSymbol];
+    NSString *stockPrice = [[NavCtrlDAO sharedInstance] getStockQuoteForSymbol:company.stockSymbol];
     cell.detailTextLabel.text = [NSString stringWithFormat:@"Stock Price: %@\t\tTicker Symbol: %@",
                                  stockPrice ? stockPrice : @"?", company.stockSymbol];
     
@@ -128,7 +129,7 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
-        [[CompanyDAO sharedInstance] deleteCompanyAtIndex:indexPath.row];
+        [[NavCtrlDAO sharedInstance] deleteCompanyAtIndex:indexPath.row];
         
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }   
@@ -143,7 +144,7 @@
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
 {
     if (fromIndexPath.row == toIndexPath.row) return;
-    [[CompanyDAO sharedInstance] moveCompanyFromIndex:fromIndexPath.row toIndex:toIndexPath.row];
+    [[NavCtrlDAO sharedInstance] moveCompanyFromIndex:fromIndexPath.row toIndex:toIndexPath.row];
     
 //    Company *company = [[self.companyList objectAtIndex:fromIndexPath.row] retain];
 //    [self.companyList removeObjectAtIndex:fromIndexPath.row];
@@ -164,16 +165,20 @@
 // In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Company *company = [[CompanyDAO sharedInstance] getCompanyAtIndex:indexPath.row];
-    self.productViewController.title = company.name;
-    [self.navigationController pushViewController:self.productViewController animated:YES];
+    Company *company = [[NavCtrlDAO sharedInstance] getCompanyAtIndex:indexPath.row];
+    [self openViewForSelectedObject:company];
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"accessoryButtonTappedForRowWithIndexPath");
     [self createDetailComanyViewController];
-    Company *company = [[CompanyDAO sharedInstance] getCompanyAtIndex:indexPath.row];
+    
+    Company *company = [[NavCtrlDAO sharedInstance] getCompanyAtIndex:indexPath.row];
     self.detailCompanyViewController.company = company;
+    self.detailCompanyViewController.completionHandler = ^{
+        [self.tableView reloadData];
+        [self refreshStockQuotes];
+    };
+    
     [self showDetailViewController:self.detailCompanyViewController.navigationController sender:self];
 }
 
@@ -186,15 +191,28 @@
 }
 
 - (void) handleAddCompany:(UIBarButtonItem *)sender {
-    //NSLog(@"handleAddCompany");
     [self createDetailComanyViewController];
     self.detailCompanyViewController.company = nil;
+    
+    self.detailCompanyViewController.completionHandler = ^{
+        [self.tableView reloadData];
+        [self refreshStockQuotes];
+    };
+    
     [self showDetailViewController:self.detailCompanyViewController.navigationController sender:self];
 }
 
+- (void) openViewForSelectedObject: (id)object  {
+    Company *company = (Company *) object;
+    self.productViewController.company = company;
+    self.productViewController.title = company.name;
+    [self.navigationController pushViewController:self.productViewController animated:YES];
+}
+
+/*
 - (void) addCompany:(Company *)company {
     //NSLog(@"addCompany: %@", company);
-    [[CompanyDAO sharedInstance] addCompany:company completionBlock:^{
+    [[NavCtrlDAO sharedInstance] addCompany:company completionBlock:^{
         [self.tableView reloadData];
         [self refreshStockQuotes];
     }];
@@ -202,14 +220,15 @@
 
 - (void) updateCompany:(Company *)company {
     //NSLog(@"udateCompany");
-    [[CompanyDAO sharedInstance] updateCompany:company completionBlock:^{
+    [[NavCtrlDAO sharedInstance] updateCompany:company completionBlock:^{
         [self.tableView reloadData];
         [self refreshStockQuotes];
     }];
 }
+*/
 
 - (void) refreshStockQuotes {
-    [[CompanyDAO sharedInstance] fetchStockQuotes:^{
+    [[NavCtrlDAO sharedInstance] fetchStockQuotes:^{
         [self.tableView reloadData];
     }];
 }
