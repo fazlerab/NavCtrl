@@ -151,15 +151,6 @@
 			name = DAO;
 			sourceTree = "<group>";
 		};
-		1D991ECA1BDEE1F30012E668 /* ProductWebViewController */ = {
-			isa = PBXGroup;
-			children = (
-				1D6BF9821BDF215C0035A30E /* ProductWebViewController.h */,
-				1D6BF9831BDF215C0035A30E /* ProductWebViewController.m */,
-			);
-			name = ProductWebViewController;
-			sourceTree = "<group>";
-		};
 		483796CB1BCBF7A00062D5AB /* AppDelegate */ = {
 			isa = PBXGroup;
 			children = (
@@ -190,6 +181,8 @@
 				1D68582A1BE94AE000BB0F42 /* ProductDetailViewController.h */,
 				1D68582B1BE94AE000BB0F42 /* ProductDetailViewController.m */,
 				1D68582C1BE94AE000BB0F42 /* ProductDetailViewController.xib */,
+				1D6BF9821BDF215C0035A30E /* ProductWebViewController.h */,
+				1D6BF9831BDF215C0035A30E /* ProductWebViewController.m */,
 			);
 			name = ProductViewController;
 			sourceTree = "<group>";
@@ -233,7 +226,6 @@
 				1D0A94361BE2D00800599B4D /* DAO */,
 				483796CC1BCBF7C70062D5AB /* ParentViewController */,
 				483796CD1BCBF7EB0062D5AB /* ProductViewController */,
-				1D991ECA1BDEE1F30012E668 /* ProductWebViewController */,
 				48A656C618163BF200746D36 /* Images.xcassets */,
 				48A656BB18163BF200746D36 /* Supporting Files */,
 			);
