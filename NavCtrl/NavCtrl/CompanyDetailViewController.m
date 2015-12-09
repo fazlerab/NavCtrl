@@ -7,11 +7,11 @@
 //
 
 #import "NavCtrlDAO.h"
-#import "NewCompanyViewController.h"
+#import "CompanyDetailViewController.h"
 #import "CompanyViewController.h"
 #import "Company.h"
 
-@interface NewCompanyViewController () <UITextFieldDelegate>
+@interface CompanyDetailViewController () <UITextFieldDelegate>
 
 @property (retain, nonatomic) IBOutlet UITextField *companyNameTextField;
 @property (retain, nonatomic) IBOutlet UITextField *companyLogoTextField;
@@ -19,7 +19,7 @@
 
 @end
 
-@implementation NewCompanyViewController
+@implementation CompanyDetailViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -105,7 +105,6 @@
         self.company.stockSymbol = symbol;
         
         [[NavCtrlDAO sharedInstance] addCompany:self.company completionBlock:self.completionHandler];
-        
     }
     
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];

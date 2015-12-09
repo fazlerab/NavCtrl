@@ -7,14 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1D68582D1BE94AE000BB0F42 /* NewProductViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D68582B1BE94AE000BB0F42 /* NewProductViewController.m */; };
-		1D68582E1BE94AE000BB0F42 /* NewProductViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1D68582C1BE94AE000BB0F42 /* NewProductViewController.xib */; };
-		1D6BF9841BDF215C0035A30E /* ProductDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D6BF9831BDF215C0035A30E /* ProductDetailViewController.m */; };
+		1D68582D1BE94AE000BB0F42 /* ProductDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D68582B1BE94AE000BB0F42 /* ProductDetailViewController.m */; };
+		1D68582E1BE94AE000BB0F42 /* ProductDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1D68582C1BE94AE000BB0F42 /* ProductDetailViewController.xib */; };
+		1D6BF9841BDF215C0035A30E /* ProductWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D6BF9831BDF215C0035A30E /* ProductWebViewController.m */; };
 		1D7C84771BFD133A00246776 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D7C84761BFD133A00246776 /* libsqlite3.tbd */; };
 		1D7C847E1BFD186F00246776 /* navctrl.db in Resources */ = {isa = PBXBuildFile; fileRef = 1D7C847D1BFD186F00246776 /* navctrl.db */; };
 		1D88552B1BE7B913008A88C1 /* NavCtrlDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D88552A1BE7B913008A88C1 /* NavCtrlDAO.m */; };
-		1D88552F1BE81BA4008A88C1 /* NewCompanyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D88552D1BE81BA4008A88C1 /* NewCompanyViewController.m */; };
-		1D8855301BE81BA4008A88C1 /* NewCompanyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1D88552E1BE81BA4008A88C1 /* NewCompanyViewController.xib */; };
+		1D88552F1BE81BA4008A88C1 /* CompanyDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D88552D1BE81BA4008A88C1 /* CompanyDetailViewController.m */; };
+		1D8855301BE81BA4008A88C1 /* CompanyDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1D88552E1BE81BA4008A88C1 /* CompanyDetailViewController.xib */; };
 		1DA54CF71C0D0D4500F22E1B /* NavCtrlModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1DA54CF51C0D0D4500F22E1B /* NavCtrlModel.xcdatamodeld */; };
 		1DA54D011C0D12DC00F22E1B /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DA54CFB1C0D12DC00F22E1B /* Product.m */; };
 		1DA54D031C0D12DC00F22E1B /* Company.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DA54CFF1C0D12DC00F22E1B /* Company.m */; };
@@ -55,18 +55,18 @@
 
 /* Begin PBXFileReference section */
 		1D0A942C1BE2B1E000599B4D /* NavCtrlDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavCtrlDAO.h; sourceTree = "<group>"; };
-		1D68582A1BE94AE000BB0F42 /* NewProductViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewProductViewController.h; sourceTree = "<group>"; };
-		1D68582B1BE94AE000BB0F42 /* NewProductViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewProductViewController.m; sourceTree = "<group>"; };
-		1D68582C1BE94AE000BB0F42 /* NewProductViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewProductViewController.xib; sourceTree = "<group>"; };
-		1D6BF9821BDF215C0035A30E /* ProductDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductDetailViewController.h; path = ../ProductDetailViewController.h; sourceTree = "<group>"; };
-		1D6BF9831BDF215C0035A30E /* ProductDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductDetailViewController.m; path = ../ProductDetailViewController.m; sourceTree = "<group>"; };
+		1D68582A1BE94AE000BB0F42 /* ProductDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductDetailViewController.h; sourceTree = "<group>"; };
+		1D68582B1BE94AE000BB0F42 /* ProductDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductDetailViewController.m; sourceTree = "<group>"; };
+		1D68582C1BE94AE000BB0F42 /* ProductDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProductDetailViewController.xib; sourceTree = "<group>"; };
+		1D6BF9821BDF215C0035A30E /* ProductWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductWebViewController.h; path = ../ProductWebViewController.h; sourceTree = "<group>"; };
+		1D6BF9831BDF215C0035A30E /* ProductWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductWebViewController.m; path = ../ProductWebViewController.m; sourceTree = "<group>"; };
 		1D7C84741BFD03E400246776 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		1D7C84761BFD133A00246776 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		1D7C847D1BFD186F00246776 /* navctrl.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = navctrl.db; sourceTree = "<group>"; };
 		1D88552A1BE7B913008A88C1 /* NavCtrlDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavCtrlDAO.m; sourceTree = "<group>"; };
-		1D88552C1BE81BA4008A88C1 /* NewCompanyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewCompanyViewController.h; sourceTree = "<group>"; };
-		1D88552D1BE81BA4008A88C1 /* NewCompanyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewCompanyViewController.m; sourceTree = "<group>"; };
-		1D88552E1BE81BA4008A88C1 /* NewCompanyViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewCompanyViewController.xib; sourceTree = "<group>"; };
+		1D88552C1BE81BA4008A88C1 /* CompanyDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompanyDetailViewController.h; sourceTree = "<group>"; };
+		1D88552D1BE81BA4008A88C1 /* CompanyDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompanyDetailViewController.m; sourceTree = "<group>"; };
+		1D88552E1BE81BA4008A88C1 /* CompanyDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CompanyDetailViewController.xib; sourceTree = "<group>"; };
 		1DA54CF61C0D0D4500F22E1B /* NavCtrlModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NavCtrlModel.xcdatamodel; sourceTree = "<group>"; };
 		1DA54CFA1C0D12DC00F22E1B /* Product.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Product.h; sourceTree = "<group>"; };
 		1DA54CFB1C0D12DC00F22E1B /* Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Product.m; sourceTree = "<group>"; };
@@ -151,13 +151,13 @@
 			name = DAO;
 			sourceTree = "<group>";
 		};
-		1D991ECA1BDEE1F30012E668 /* ProductDetailViewController */ = {
+		1D991ECA1BDEE1F30012E668 /* ProductWebViewController */ = {
 			isa = PBXGroup;
 			children = (
-				1D6BF9821BDF215C0035A30E /* ProductDetailViewController.h */,
-				1D6BF9831BDF215C0035A30E /* ProductDetailViewController.m */,
+				1D6BF9821BDF215C0035A30E /* ProductWebViewController.h */,
+				1D6BF9831BDF215C0035A30E /* ProductWebViewController.m */,
 			);
-			name = ProductDetailViewController;
+			name = ProductWebViewController;
 			sourceTree = "<group>";
 		};
 		483796CB1BCBF7A00062D5AB /* AppDelegate */ = {
@@ -175,9 +175,9 @@
 				48A656E318163C1B00746D36 /* CompanyViewController.h */,
 				48A656E418163C1B00746D36 /* CompanyViewController.m */,
 				48A656E518163C1B00746D36 /* CompanyViewController.xib */,
-				1D88552C1BE81BA4008A88C1 /* NewCompanyViewController.h */,
-				1D88552D1BE81BA4008A88C1 /* NewCompanyViewController.m */,
-				1D88552E1BE81BA4008A88C1 /* NewCompanyViewController.xib */,
+				1D88552C1BE81BA4008A88C1 /* CompanyDetailViewController.h */,
+				1D88552D1BE81BA4008A88C1 /* CompanyDetailViewController.m */,
+				1D88552E1BE81BA4008A88C1 /* CompanyDetailViewController.xib */,
 			);
 			name = ParentViewController;
 			sourceTree = "<group>";
@@ -187,9 +187,9 @@
 			children = (
 				48A656E818163F8700746D36 /* ProductViewController.h */,
 				48A656E918163F8700746D36 /* ProductViewController.m */,
-				1D68582A1BE94AE000BB0F42 /* NewProductViewController.h */,
-				1D68582B1BE94AE000BB0F42 /* NewProductViewController.m */,
-				1D68582C1BE94AE000BB0F42 /* NewProductViewController.xib */,
+				1D68582A1BE94AE000BB0F42 /* ProductDetailViewController.h */,
+				1D68582B1BE94AE000BB0F42 /* ProductDetailViewController.m */,
+				1D68582C1BE94AE000BB0F42 /* ProductDetailViewController.xib */,
 			);
 			name = ProductViewController;
 			sourceTree = "<group>";
@@ -233,7 +233,7 @@
 				1D0A94361BE2D00800599B4D /* DAO */,
 				483796CC1BCBF7C70062D5AB /* ParentViewController */,
 				483796CD1BCBF7EB0062D5AB /* ProductViewController */,
-				1D991ECA1BDEE1F30012E668 /* ProductDetailViewController */,
+				1D991ECA1BDEE1F30012E668 /* ProductWebViewController */,
 				48A656C618163BF200746D36 /* Images.xcassets */,
 				48A656BB18163BF200746D36 /* Supporting Files */,
 			);
@@ -358,10 +358,10 @@
 				1DF5A0421BDE8E0D00B51945 /* motorola.png in Resources */,
 				1DF5A03E1BDE8C0600B51945 /* samsung.png in Resources */,
 				48A656BF18163BF200746D36 /* InfoPlist.strings in Resources */,
-				1D8855301BE81BA4008A88C1 /* NewCompanyViewController.xib in Resources */,
+				1D8855301BE81BA4008A88C1 /* CompanyDetailViewController.xib in Resources */,
 				1DF5A0441BDE8EC700B51945 /* apple.png in Resources */,
 				48A656C718163BF200746D36 /* Images.xcassets in Resources */,
-				1D68582E1BE94AE000BB0F42 /* NewProductViewController.xib in Resources */,
+				1D68582E1BE94AE000BB0F42 /* ProductDetailViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -384,14 +384,14 @@
 				1D88552B1BE7B913008A88C1 /* NavCtrlDAO.m in Sources */,
 				1DA54D141C0D1B5700F22E1B /* Product+CoreDataProperties.m in Sources */,
 				48A656E618163C1B00746D36 /* CompanyViewController.m in Sources */,
-				1D6BF9841BDF215C0035A30E /* ProductDetailViewController.m in Sources */,
+				1D6BF9841BDF215C0035A30E /* ProductWebViewController.m in Sources */,
 				1DA54D181C0D1DC100F22E1B /* CoreDataDAO.m in Sources */,
-				1D68582D1BE94AE000BB0F42 /* NewProductViewController.m in Sources */,
+				1D68582D1BE94AE000BB0F42 /* ProductDetailViewController.m in Sources */,
 				48A656C518163BF200746D36 /* NavControllerAppDelegate.m in Sources */,
 				48A656C118163BF200746D36 /* main.m in Sources */,
 				1DA54D151C0D1B5700F22E1B /* Company+CoreDataProperties.m in Sources */,
 				1DA54D011C0D12DC00F22E1B /* Product.m in Sources */,
-				1D88552F1BE81BA4008A88C1 /* NewCompanyViewController.m in Sources */,
+				1D88552F1BE81BA4008A88C1 /* CompanyDetailViewController.m in Sources */,
 				48A656EB18163F8700746D36 /* ProductViewController.m in Sources */,
 				1DA54D031C0D12DC00F22E1B /* Company.m in Sources */,
 			);

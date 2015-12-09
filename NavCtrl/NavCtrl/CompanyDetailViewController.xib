@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CompanyDetailViewController">
+            <connections>
+                <outlet property="companyLogoTextField" destination="HYk-XW-i0f" id="W6F-ID-pot"/>
+                <outlet property="companyNameTextField" destination="C0J-NH-8HE" id="IAO-bk-VCj"/>
+                <outlet property="tickerSymbolTextField" destination="meV-go-sVV" id="Cru-bh-k51"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter company name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="C0J-NH-8HE">
+                    <rect key="frame" x="8" y="72" width="584" height="30"/>
+                    <animations/>
+                    <accessibility key="accessibilityConfiguration" identifier=""/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits"/>
+                </textField>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Company Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TMC-Eo-Hap">
+                    <rect key="frame" x="8" y="51" width="123" height="21"/>
+                    <animations/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Company Logo" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="akb-H2-tof">
+                    <rect key="frame" x="8" y="169" width="116" height="21"/>
+                    <animations/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter company logo file name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HYk-XW-i0f">
+                    <rect key="frame" x="8" y="190" width="584" height="30"/>
+                    <animations/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits"/>
+                </textField>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ticker Symbol" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I8k-ms-dda">
+                    <rect key="frame" x="8" y="110" width="109" height="21"/>
+                    <animations/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter company's ticker symbol" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="meV-go-sVV">
+                    <rect key="frame" x="8" y="131" width="584" height="30"/>
+                    <animations/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits"/>
+                </textField>
+            </subviews>
+            <animations/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="HYk-XW-i0f" firstAttribute="top" secondItem="akb-H2-tof" secondAttribute="bottom" id="1Yv-MX-5at"/>
+                <constraint firstAttribute="trailing" secondItem="meV-go-sVV" secondAttribute="trailing" constant="8" id="9di-Oc-7W7"/>
+                <constraint firstItem="HYk-XW-i0f" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="MKr-q2-aNw"/>
+                <constraint firstItem="akb-H2-tof" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="MbO-5N-E7n"/>
+                <constraint firstItem="meV-go-sVV" firstAttribute="top" secondItem="I8k-ms-dda" secondAttribute="bottom" id="Nfs-hd-EwR"/>
+                <constraint firstItem="akb-H2-tof" firstAttribute="top" secondItem="meV-go-sVV" secondAttribute="bottom" constant="8" id="NjL-dP-RR8"/>
+                <constraint firstItem="I8k-ms-dda" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="Pkq-2P-ZJZ"/>
+                <constraint firstItem="I8k-ms-dda" firstAttribute="top" secondItem="C0J-NH-8HE" secondAttribute="bottom" constant="8" id="aDA-b5-o7N"/>
+                <constraint firstItem="TMC-Eo-Hap" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="51" id="b2m-fz-U3Z"/>
+                <constraint firstAttribute="trailing" secondItem="C0J-NH-8HE" secondAttribute="trailing" constant="8" id="fSi-ik-3Q5"/>
+                <constraint firstItem="TMC-Eo-Hap" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="ivl-he-So5"/>
+                <constraint firstItem="meV-go-sVV" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="rET-z8-Q4e"/>
+                <constraint firstItem="C0J-NH-8HE" firstAttribute="top" secondItem="TMC-Eo-Hap" secondAttribute="bottom" id="sro-GE-sUN"/>
+                <constraint firstItem="C0J-NH-8HE" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="tIX-cE-I8S"/>
+                <constraint firstAttribute="trailing" secondItem="HYk-XW-i0f" secondAttribute="trailing" constant="8" id="tq1-7D-35u"/>
+            </constraints>
+        </view>
+    </objects>
+</document>

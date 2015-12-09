@@ -7,17 +7,20 @@
 //
 
 #import "ProductViewController.h"
+#import "ProductWebViewController.h"
 #import "ProductDetailViewController.h"
-#import "NewProductViewController.h"
 #import "Company.h"
 #import "Product.h"
 #import "NavCtrlDAO.h"
 
 @interface ProductViewController ()
 
+@property (nonatomic, retain) ProductWebViewController *webViewController;
 @property (nonatomic, retain) ProductDetailViewController *detailViewController;
-@property (nonatomic, retain) NewProductViewController *addUpdateProductViewController;
-@property (nonatomic, retain) UINavigationController *addUpdateViewNavController;
+@property (nonatomic, retain) UINavigationController *detailViewNavController;
+
+@property (nonatomic, retain) UIBarButtonItem *undoButton;
+@property (nonatomic, retain) UIBarButtonItem *redoButton;
 
 @end
 
@@ -39,16 +42,21 @@
      self.clearsSelectionOnViewWillAppear = NO;
  
     UIBarButtonItem *addProductButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(handleAddButton:)];
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     self.navigationItem.rightBarButtonItems = @[addProductButtonItem, self.editButtonItem];
+    
+    self.undoButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemUndo target:self action:@selector(handleUndo:)];
+    self.redoButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRedo target:self action:@selector(handleRedo:)];
+    self.navigationItem.leftItemsSupplementBackButton = YES;
+    self.navigationItem.leftBarButtonItems = @[self.undoButton, self.redoButton];
+    
+    [addProductButtonItem release];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [[NavCtrlDAO sharedInstance] loadProductsForCompany:self.title completionBlock:^{
-        [self.tableView reloadData];
+    [[NavCtrlDAO sharedInstance] loadProductsForCompany:self.company completionBlock:^{
+        [self refreshView];
     }];
 }
 
@@ -58,14 +66,15 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (UITableViewCell *) configureCell: (UITableViewCell *)cell
-                          ForObject: (id)object
-                            AtIndex: (NSUInteger)index {
-    
+- (void) refreshView {
+    [self.tableView reloadData];
+    self.undoButton.enabled = [[NavCtrlDAO sharedInstance] canUndoProduct];
+    self.redoButton.enabled = [[NavCtrlDAO sharedInstance] canRedoProduct];
+}
+
+- (UITableViewCell *) configureCell: (UITableViewCell *)cell ForObject: (id)object AtIndex: (NSUInteger)index {
     Product *product = (Product *)object;
-    
     cell.textLabel.text = product.name;
-    
     
     UIImage *image = [UIImage imageNamed:product.company.icon];
     if (!image) {
@@ -86,19 +95,19 @@
     return cell;
 }
 
-- (void) openViewForSelectedObject: (id)object  {
+- (void) openWebViewForSelectedObject: (id)object  {
     Product *product = (Product *)object;
     
-    if (!self.detailViewController) {
-        _detailViewController = [[ProductDetailViewController alloc] init];
+    if (!self.webViewController) {
+        _webViewController = [[ProductWebViewController alloc] init];
     }
-    self.detailViewController.title = product.name;
-    self.detailViewController.URL = product.url;
+    self.webViewController.title = product.name;
+    self.webViewController.URL = product.url;
     
     // Push the view controller.
     // Only allow navigation to detail view when URL present
     if (product.url && product.url.length > 0) {
-        [self.navigationController pushViewController:self.detailViewController animated:YES];
+        [self.navigationController pushViewController:self.webViewController animated:YES];
     }
 }
 
@@ -106,19 +115,15 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-//#warning Potentially incomplete method implementation.
-    // Return the number of sections.
     return 1;
 }
 
-- (NSInteger) tableView: (UITableView *)tableView
-  numberOfRowsInSection:(NSInteger)section {
+- (NSInteger) tableView: (UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
     return [[[NavCtrlDAO sharedInstance] getProductsByCompany:self.title] count];
 }
 
-- (UITableViewCell *) tableView:(UITableView *) tableView
-          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *) tableView:(UITableView *) tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
@@ -155,22 +160,14 @@
 
 
 // Override to support rearranging the table view.
-- (void)  tableView: (UITableView *)tableView
- moveRowAtIndexPath: (NSIndexPath *)fromIndexPath
-        toIndexPath: (NSIndexPath *)toIndexPath {
+- (void)  tableView: (UITableView *)tableView moveRowAtIndexPath: (NSIndexPath *)fromIndexPath toIndexPath: (NSIndexPath *)toIndexPath {
     
     if (fromIndexPath.row == toIndexPath.row) return;
     
-    [[NavCtrlDAO sharedInstance] moveProductFromIndex:fromIndexPath.row
-                                              toIndex:toIndexPath.row
-                                       forCompanyName:self.title];
-    
-    /*
-    NSDictionary *product = [[self.products objectAtIndex:[fromIndexPath row]] retain];
-    [self.products removeObjectAtIndex:[fromIndexPath row]];
-    [self.products insertObject:product atIndex:[toIndexPath row]];
-    [product release];
-     */
+    [[NavCtrlDAO sharedInstance] moveProductFromIndex: fromIndexPath.row
+                                              toIndex: toIndexPath.row
+                                       forCompanyName: self.title
+                                      completionBlock: ^{[self refreshView];}];
 }
 
 
@@ -191,57 +188,65 @@
 
     // Pass the selected object to the new view controller.
     id object = [[NavCtrlDAO sharedInstance] getProductAtIndex:indexPath.row forCompanyName:self.title];
-    [self openViewForSelectedObject:object];
+    [self openWebViewForSelectedObject:object];
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
-    [self createAddUpdateProductViewController];
+    [self createDetailViewController];
     
     Product *product = [[NavCtrlDAO sharedInstance] getProductAtIndex:indexPath.row forCompanyName:self.title];
     
-    self.addUpdateProductViewController.product = product;
+    self.detailViewController.product = product;
+    self.detailViewController.company = self.company;
+    self.detailViewController.completionHandler = ^{
+        [self refreshView];
+    };
     
-    [self showDetailViewController:self.addUpdateProductViewController.navigationController sender:self];
+    [self showDetailViewController:self.detailViewController.navigationController sender:self];
+}
+
+- (void) handleUndo: (UIBarButtonItem *)sender {
+    [[NavCtrlDAO sharedInstance] undoProductForCompany:self.company CompletionBlock:^{
+        [self refreshView];
+    }];
+}
+
+-(void) handleRedo: (UIBarButtonItem *)sender {
+    [[NavCtrlDAO sharedInstance] redoProductForCompany:self.company CompletionBlock:^{
+        [self refreshView];
+    }];
 }
 
 - (void) handleAddButton:(UIBarButtonItem *)sender {
-    [self createAddUpdateProductViewController];
+    [self createDetailViewController];
     
-    Product *product = [[NavCtrlDAO sharedInstance] newProductForCompany:self.company];
-    product.company = self.company;
+    self.detailViewController.product = nil;
+    self.detailViewController.company = self.company;
+    self.detailViewController.completionHandler = ^{
+        [self refreshView];
+    };
     
-    self.addUpdateProductViewController.product = product;
-    
-    [self showDetailViewController:self.addUpdateProductViewController.navigationController sender:self];
+    [self showDetailViewController:self.detailViewController.navigationController sender:self];
 }
 
-- (void) createAddUpdateProductViewController {
-    if (!self.addUpdateProductViewController) {
-        _addUpdateProductViewController = [[NewProductViewController alloc] initWithNibName:@"NewProductViewController" bundle:nil];
+- (void) createDetailViewController {
+    if (!self.detailViewController) {
+        _detailViewController = [[ProductDetailViewController alloc] initWithNibName:@"ProductDetailViewController" bundle:nil];
         
-        _addUpdateViewNavController = [[UINavigationController alloc] initWithRootViewController:self.addUpdateProductViewController];
+        _detailViewNavController = [[UINavigationController alloc] initWithRootViewController:self.detailViewController];
         
-        [self.addUpdateViewNavController setModalPresentationStyle:UIModalPresentationFormSheet];
+        [self.detailViewNavController setModalPresentationStyle:UIModalPresentationFormSheet];
     }
 }
 
-- (void) addProduct:(Product *)product {
-    [[NavCtrlDAO sharedInstance] addProduct: product
-                             forCompanyName: self.title
-                            completionBlock: ^{ [self.tableView reloadData]; }];
-}
-
-- (void) updateProduct:(Product *)product {
-    [[NavCtrlDAO sharedInstance] updateProduct:product
-                                forCompanyName:self.title
-                               completionBlock:^{ [self.tableView reloadData]; }];
-}
-
 - (void) dealloc {
+    [_webViewController release];
     [_detailViewController release];
-    [_addUpdateProductViewController release];
-    [_addUpdateViewNavController release];
+    [_detailViewNavController release];
     [_company release];
+    [_undoButton release];
+    [_redoButton release];
+
     [super dealloc];
 }
 

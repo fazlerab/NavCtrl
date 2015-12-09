@@ -33,10 +33,17 @@
 
 - (Company *) getCompanyByName:(NSString *)name;
 
-- (void) moveCompanyFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex;
+- (void) moveCompanyFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex completionBlock:(void(^)(void))completion;
+
+- (void) undoCompany: (void(^)(void))completion;
+- (void) redoCompany:(void(^)(void))completion;
+
+- (BOOL) canUndoCompany;
+- (BOOL) canRedoCompany;
 
 
-- (void) loadProductsForCompany:(NSString *)companyName completionBlock:(void(^)(void))completionBlock;
+
+- (void) loadProductsForCompany:(Company *)company completionBlock:(void(^)(void))completionBlock;
 
 - (Product *) newProductForCompany: (Company *)company;
 
@@ -50,10 +57,16 @@
 
 - (void) removeProductAtIndex:(NSInteger)index forCompanyName:(NSString *)companyName;
 
-- (void) moveProductFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex forCompanyName:(NSString *)companyName;
+- (void) moveProductFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex forCompanyName:(NSString *)companyName completionBlock:(void(^)(void))completion;
+
+- (void) undoProductForCompany: (Company *)company CompletionBlock: (void(^)(void))completion;
+- (void) redoProductForCompany: (Company *)company CompletionBlock: (void(^)(void))completion;
+
+- (BOOL) canUndoProduct;
+- (BOOL) canRedoProduct;
+
 
 - (void) fetchStockQuotes:(void(^)(void))fetchDidFinish;
-
 - (NSString *) getStockQuoteForSymbol:(NSString *)symbol;
 
 @end

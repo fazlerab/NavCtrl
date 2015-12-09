@@ -8,7 +8,7 @@
 
 #import "CompanyViewController.h"
 #import "ProductViewController.h"
-#import "NewCompanyViewController.h"
+#import "CompanyDetailViewController.h"
 #import "NavCtrlDAO.h"
 #import "Company.h"
 #import "Product.h"
@@ -16,7 +16,10 @@
 @interface CompanyViewController ()
 
 @property (nonatomic, retain) UIBarButtonItem *addButtonItem;
-@property (nonatomic, retain) NewCompanyViewController *detailCompanyViewController;
+@property (nonatomic, retain) UIBarButtonItem *undoButton;
+@property (nonatomic, retain) UIBarButtonItem *redoButton;
+
+@property (nonatomic, retain) CompanyDetailViewController *detailCompanyViewController;
 @property (nonatomic, retain) UINavigationController *detailViewNavController;
 
 @end
@@ -43,20 +46,29 @@
     self.addButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
                                                                    target:self
                                                                    action:@selector(handleAddCompany:)];
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    self.navigationItem.rightBarButtonItems = @[self.addButtonItem, self.editButtonItem];
     
-    self.title = @"Mobile device makers";
+    self.undoButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemUndo
+                                                                    target:self
+                                                                    action:@selector(handleUndo:)];
+    
+    self.redoButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRedo
+                                                                    target:self
+                                                                    action:@selector(handleRedo:)];
+    
+    self.navigationItem.rightBarButtonItems = @[self.addButtonItem, self.editButtonItem];
+    self.navigationItem.leftBarButtonItems = @[self.undoButton, self.redoButton];
+        
+    self.title = @"Mobile Companies";
     
     [[NavCtrlDAO sharedInstance] loadCompanyList:^{
-        [self.tableView reloadData];
-        [self refreshStockQuotes];
+        [self refreshView];
     }];
 }
 
+
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self refreshStockQuotes];
+    [self refreshView];
 }
 
 - (void)didReceiveMemoryWarning
@@ -65,6 +77,16 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void) refreshView {
+    [self.tableView reloadData];
+    
+    self.undoButton.enabled = [[NavCtrlDAO sharedInstance] canUndoCompany];
+    self.redoButton.enabled = [[NavCtrlDAO sharedInstance] canRedoCompany];
+    
+    [[NavCtrlDAO sharedInstance] fetchStockQuotes:^{
+        [self.tableView reloadData];
+    }];
+}
 
 #pragma mark - Table view data source
 
@@ -144,12 +166,7 @@
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
 {
     if (fromIndexPath.row == toIndexPath.row) return;
-    [[NavCtrlDAO sharedInstance] moveCompanyFromIndex:fromIndexPath.row toIndex:toIndexPath.row];
-    
-//    Company *company = [[self.companyList objectAtIndex:fromIndexPath.row] retain];
-//    [self.companyList removeObjectAtIndex:fromIndexPath.row];
-//    [self.companyList insertObject:company atIndex:toIndexPath.row];
-//    [company release];
+    [[NavCtrlDAO sharedInstance] moveCompanyFromIndex:fromIndexPath.row toIndex:toIndexPath.row completionBlock:^{ [self refreshView]; }];
 }
 
 
@@ -174,17 +191,14 @@
     
     Company *company = [[NavCtrlDAO sharedInstance] getCompanyAtIndex:indexPath.row];
     self.detailCompanyViewController.company = company;
-    self.detailCompanyViewController.completionHandler = ^{
-        [self.tableView reloadData];
-        [self refreshStockQuotes];
-    };
+    self.detailCompanyViewController.completionHandler = ^{ [self refreshView]; };
     
     [self showDetailViewController:self.detailCompanyViewController.navigationController sender:self];
 }
 
 - (void) createDetailComanyViewController {
     if (!self.detailCompanyViewController) {
-        _detailCompanyViewController = [[NewCompanyViewController alloc] initWithNibName:@"NewCompanyViewController" bundle:nil];
+        _detailCompanyViewController = [[CompanyDetailViewController alloc] initWithNibName:@"CompanyDetailViewController" bundle:nil];
         _detailViewNavController = [[UINavigationController alloc] initWithRootViewController:self.detailCompanyViewController];
         self.detailViewNavController.modalPresentationStyle = UIModalPresentationFormSheet;
     }
@@ -194,12 +208,17 @@
     [self createDetailComanyViewController];
     self.detailCompanyViewController.company = nil;
     
-    self.detailCompanyViewController.completionHandler = ^{
-        [self.tableView reloadData];
-        [self refreshStockQuotes];
-    };
+    self.detailCompanyViewController.completionHandler = ^{ [self refreshView]; };
     
     [self showDetailViewController:self.detailCompanyViewController.navigationController sender:self];
+}
+
+- (void) handleUndo:(UIBarButtonItem *)sender {
+    [[NavCtrlDAO sharedInstance] undoCompany:^{ [self refreshView]; }];
+}
+
+- (void) handleRedo:(UIBarButtonItem *)sender {
+    [[NavCtrlDAO sharedInstance] redoCompany:^{ [self refreshView]; }];
 }
 
 - (void) openViewForSelectedObject: (id)object  {
@@ -209,32 +228,10 @@
     [self.navigationController pushViewController:self.productViewController animated:YES];
 }
 
-/*
-- (void) addCompany:(Company *)company {
-    //NSLog(@"addCompany: %@", company);
-    [[NavCtrlDAO sharedInstance] addCompany:company completionBlock:^{
-        [self.tableView reloadData];
-        [self refreshStockQuotes];
-    }];
-}
-
-- (void) updateCompany:(Company *)company {
-    //NSLog(@"udateCompany");
-    [[NavCtrlDAO sharedInstance] updateCompany:company completionBlock:^{
-        [self.tableView reloadData];
-        [self refreshStockQuotes];
-    }];
-}
-*/
-
-- (void) refreshStockQuotes {
-    [[NavCtrlDAO sharedInstance] fetchStockQuotes:^{
-        [self.tableView reloadData];
-    }];
-}
-
 - (void)dealloc {
     [_addButtonItem release];
+    [_undoButton release];
+    [_redoButton release];
     [_productViewController release];
     [_detailCompanyViewController release];
     [_detailViewNavController release];

@@ -10,7 +10,7 @@
 
 @class Product;
 
-@interface ProductDetailViewController : UIViewController
+@interface ProductWebViewController : UIViewController
 
 @property (nonatomic, retain) NSString *URL;
 

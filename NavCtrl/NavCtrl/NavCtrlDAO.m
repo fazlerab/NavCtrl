@@ -43,8 +43,7 @@
     return self;
 }
 
-
-// Company methods
+// MARK: Company methods
 - (void) loadCompanyList:(void (^)(void))completionBlock {
     [self loadData];
     completionBlock();
@@ -91,7 +90,7 @@
     }
 }
 
-- (void) moveCompanyFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex {
+- (void) moveCompanyFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex completionBlock:(void(^)(void))completion {
     if (fromIndex == toIndex) return;
     
     Company *toCompany = [self getCompanyAtIndex:toIndex];
@@ -128,13 +127,18 @@
     return c;
 }
 
+- (void) undoCompany: (void(^)(void))completion { }
+
+- (void) redoCompany:(void(^)(void))completion { }
+
+- (BOOL) canUndoCompany { return NO; }
+
+- (BOOL) canRedoCompany { return NO; }
 
 /* -------------------------------------------------------------------------------- */
-// Product methods
+// MARK: Product methods
 
-- (void) loadProductsForCompany:(NSString *)companyName completionBlock:(void(^)(void))completionBlock {
-    // Only used by subclasses.
-}
+- (void) loadProductsForCompany:(Company *)company completionBlock:(void(^)(void))completionBlock { }
 
 - (Product *) newProductForCompany: (Company *)company {
     return nil;
@@ -146,15 +150,9 @@
     completionBlock();
 }
 
-- (void) updateProduct:(Product *)product forCompanyName:(NSString *)companyName completionBlock:(void (^)(void))completionBlock {
-//    Company *c = [self getCompanyByName:companyName];
-//    [c updateProduct:product];
-//    completionBlock();
-}
+- (void) updateProduct:(Product *)product forCompanyName:(NSString *)companyName completionBlock:(void (^)(void))completionBlock { }
 
 - (NSArray *) getProductsByCompany:(NSString *)companyName {
-//    Company *c = [self getCompanyByName:companyName];
-//    return c.products;
     return nil;
 }
 
@@ -163,22 +161,21 @@
     return [productList objectAtIndex:index];
 }
 
-- (void) removeProductAtIndex:(NSInteger)index forCompanyName:(NSString *)companyName {
-//    Company *c = [self getCompanyByName:companyName];
-//    [c removeProductAtIndex:index];
-//    for(NSUInteger i = index; i < c.products.count; i++) {
-//        c.products[i].listOrder--;
-//    }
-}
+- (void) removeProductAtIndex:(NSInteger)index forCompanyName:(NSString *)companyName { }
 
-- (void) moveProductFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex forCompanyName:(NSString *)companyName {
-//    Company *c = [self getCompanyByName:companyName];
-//    [c moveProductFromIndex:fromIndex toIndex:toIndex];
-}
+- (void) moveProductFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex forCompanyName:(NSString *)companyName completionBlock:(void(^)(void))completionBlock { }
+
+- (void) undoProductForCompany: (Company *)company CompletionBlock: (void(^)(void))completion { }
+
+- (void) redoProductForCompany: (Company *)company CompletionBlock: (void(^)(void))completion { }
+
+- (BOOL) canUndoProduct { return NO; }
+
+- (BOOL) canRedoProduct { return NO; }
 
 
 /* -------------------------------------------------------------------------------------------- */
-
+// MARK: Fetch Stock Quotes Methods
 // Fetches stock quotes of all the Compamy at once
 - (void) fetchStockQuotes: (void(^)(void))fetchDidFinish {
     if (!self.companies || self.companies.count == 0) return;

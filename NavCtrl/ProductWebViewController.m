@@ -7,14 +7,14 @@
 //
 
 #import <WebKit/WebKit.h>
-#import "ProductDetailViewController.h"
+#import "ProductWebViewController.h"
 #import "Product.h"
 
-@interface ProductDetailViewController () <WKNavigationDelegate>
+@interface ProductWebViewController () <WKNavigationDelegate>
 
 @end
 
-@implementation ProductDetailViewController
+@implementation ProductWebViewController
 
 - (void)loadView {
     WKWebViewConfiguration *webViewConfig = [[WKWebViewConfiguration alloc] init];

@@ -6,19 +6,19 @@
 //  Copyright © 2015 Aditya Narayan. All rights reserved.
 //
 
-#import "NewProductViewController.h"
+#import "ProductDetailViewController.h"
 #import "ProductViewController.h"
 #import "Product.h"
 #import "NavCtrlDAO.h"
 
-@interface NewProductViewController () <UITextFieldDelegate>
+@interface ProductDetailViewController () <UITextFieldDelegate>
 
 @property (retain, nonatomic) IBOutlet UITextField *productNameTextField;
 @property (retain, nonatomic) IBOutlet UITextField *productURLTextField;
 
 @end
 
-@implementation NewProductViewController
+@implementation ProductDetailViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -29,6 +29,7 @@
     UIBarButtonItem *saveButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemSave target:self action:@selector(handleSave)];
     [self.navigationItem  setRightBarButtonItem: saveButtonItem];
 }
+
 - (void)viewWillAppear:(BOOL)animated {
     if (self.product) {
         self.title = self.product.name;
@@ -78,17 +79,21 @@
     productURL = [productURL stringByTrimmingCharactersInSet:
                   [NSCharacterSet characterSetWithCharactersInString:@" "]];
     
-    if (self.product.isInserted) {
+    if (self.product == nil) {
+        NSAssert(_company != nil, @"ProductDetailViewController: company is nil");
+        _product  = [[NavCtrlDAO sharedInstance] newProductForCompany:self.company];
         self.product.name = productName;
         self.product.url = productURL;
-        
-        [self.presentingViewController.childViewControllers.lastObject addProduct:self.product];
+        self.product.company = self.company;
+        [[NavCtrlDAO sharedInstance] addProduct: self.product
+                                 forCompanyName: [self.company name]
+                                completionBlock: self.completionHandler];
         
     } else {
         self.product.name = productName;
         self.product.url = productURL;
         
-        [self.presentingViewController.childViewControllers.lastObject updateProduct:self.product];
+        [[NavCtrlDAO sharedInstance] updateProduct:self.product forCompanyName:[self.company name]  completionBlock:self.completionHandler];
     }
     
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -98,6 +103,8 @@
     [_productNameTextField release];
     [_productURLTextField release];
     [_product release];
+    [_company release];
+    [_completionHandler release];
     [super dealloc];
 }
 @end
