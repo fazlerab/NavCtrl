@@ -11,10 +11,24 @@
 #import "Company.h"
 #import "Product.h"
 
+static BOOL const PrePopulateStore = NO;
+
+static NSString *const CompanyEntity = @"Company";
+static NSString *const ProductEntity = @"Product";
+
+static NSString *const NameAttribute        = @"name";
+static NSString *const IconAttribute        = @"icon";
+static NSString *const StockSymbolAttribute = @"stockSymbol";
+static NSString *const ListOrderAttribute   = @"listOrder";
+static NSString *const URLAttribute         = @"url";
+static NSString *const ProductsAttribute    = @"products";
+static NSString *const CompanyAttribute     = @"company";
+
+
 @interface CoreDataDAO()
 
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
-@property (nonatomic, retain) NSMutableArray<Product *> *products;
+
 @end
 
 @implementation CoreDataDAO
@@ -27,21 +41,20 @@
     return self;
 }
 
-- (NSURL *)modelURL {
+// MARK: CoreData methods
+/*
+ * Setup CoreData
+ */
+- (void) initializeCoreData {
     NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"NavCtrlModel" withExtension:@"momd"];
-    return modelURL;
-}
 
-- (NSURL *)storeURL {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSURL *documentURL =  [[fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
     NSURL *storeURL = [documentURL URLByAppendingPathComponent:@"navctrl.sqlite"];
+    
     NSLog(@"storeURL: %@", storeURL);
-    return storeURL;
-}
-
-- (void) initializeCoreData {
-    NSManagedObjectModel *mom = [[[NSManagedObjectModel alloc] initWithContentsOfURL:[self modelURL]] retain];
+    
+    NSManagedObjectModel *mom = [[[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL] retain];
     NSAssert(mom != nil, @"Error initializing Managed Object Model");
     
     NSPersistentStoreCoordinator *psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:mom];
@@ -53,102 +66,273 @@
     
     [self setManagedObjectContext:moc];
     
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSError *error = nil;
-        NSPersistentStoreCoordinator *psc = [[self managedObjectContext] persistentStoreCoordinator];
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//        NSPersistentStoreCoordinator *psc = [[self managedObjectContext] persistentStoreCoordinator];
         
+        NSError *error = nil;
         NSPersistentStore *store = [psc addPersistentStoreWithType:NSSQLiteStoreType
                                                      configuration:nil
-                                                               URL:[self storeURL]
+                                                               URL:storeURL
                                                            options:nil
                                                              error:&error];
-        [moc release];
         NSAssert(store != nil, @"Error initializing PersistentStoreCoordinator: %@\n%@",
                  [error localizedDescription], [error userInfo]);
-    });
+        
+        if (PrePopulateStore) {
+            [self prePopulateStore];
+        }
+//    });
 }
 
-
-// MARK: Company methods
-- (void) loadCompanyList:(void (^)(void))completionBlock {
-    NSEntityDescription *entity = [NSEntityDescription entityForName:[Company entityName]
-                                              inManagedObjectContext:[self managedObjectContext]];
-    NSSortDescriptor *sortByListOrder = [NSSortDescriptor sortDescriptorWithKey:@"listOrder" ascending:YES];
+/*
+ * Populate CoreData Store if it is first time being created.
+ */
+- (void) prePopulateStore {
+    [super loadCompanyList:nil];
     
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    [request setEntity:entity];
-    [request setSortDescriptors:@[sortByListOrder]];
+    NSArray<Company *> *companyList = [super getCompanyList];
+    
+    for (Company *company in companyList) {
+        NSManagedObject *companyMO = [self createManagedObjectFromCompany:company];
+        
+        NSArray<Product *> *products = company.products;
+        for (Product *product in products) {
+            [self createManagedObjectFromProduct:product forCompanyManagedObject:companyMO];
+        }
+    }
     
     NSError *error = nil;
-    NSArray *results = [self.managedObjectContext executeFetchRequest:request error:&error];
+    if ( ![self.managedObjectContext save:&error] ) {
+        NSLog(@"populateStore: Error saving: %@\n%@", error.localizedDescription, error.userInfo);
+    }
+}
+
+/*
+ * Create Company ManagedObject
+ */
+- (NSManagedObject *) createManagedObjectFromCompany:(Company *) company {
+    NSManagedObject *companyMO = [NSEntityDescription insertNewObjectForEntityForName: CompanyEntity
+                                                               inManagedObjectContext: self.managedObjectContext];
+    [companyMO setValue:company.name forKey:NameAttribute];
+    [companyMO setValue:company.icon forKey:IconAttribute];
+    [companyMO setValue:company.stockSymbol forKey:StockSymbolAttribute];
+    [companyMO setValue:[NSNumber numberWithUnsignedInteger:company.listOrder] forKey:ListOrderAttribute];
     
-    if (!results) {
-        NSLog(@"Error fetching Companies: %@\n%@", error.localizedDescription, error.userInfo);
-    }
-    else {
-        [super setCompanyList:results];
-        completionBlock();
-    }
+    return companyMO;
 }
 
-- (void) deleteCompanyAtIndex:(NSInteger)index {
-    Company *company = [super getCompanyAtIndex:index];
-    [self.managedObjectContext deleteObject:company];
-    [super deleteCompanyAtIndex:index];
-    [self saveCompany];
+/*
+ * Create Product ManagedObject
+ */
+- (NSManagedObject *) createManagedObjectFromProduct:(Product *)product forCompanyManagedObject:(NSManagedObject *)companyMO {
+    NSManagedObject *productMO = [NSEntityDescription insertNewObjectForEntityForName: ProductEntity
+                                                               inManagedObjectContext: self.managedObjectContext];
+    [productMO setValue:product.name forKey:NameAttribute];
+    [productMO setValue:product.url  forKey:URLAttribute];
+    [productMO setValue:[NSNumber numberWithUnsignedInteger:product.listOrder] forKey:ListOrderAttribute];
+    [productMO setValue:companyMO forKey:CompanyAttribute];
+    
+    return productMO;
 }
 
-- (Company *) newCompany {
-    Company *company = [NSEntityDescription insertNewObjectForEntityForName: [Company entityName]
-                                                     inManagedObjectContext: self.managedObjectContext];
-    company.listOrder = [super getCompanyList].count;
+/*
+ * Construct Product from its ManagedObject
+ */
+- (Product *) productFromManagedObject:(NSManagedObject *)managedObject {
+    Product *product = [[Product alloc] init];
+    
+    product.managedObjectURI = [[managedObject objectID] URIRepresentation];
+    product.name = [managedObject valueForKey:NameAttribute];
+    product.url  = [managedObject valueForKey:URLAttribute];
+    product.listOrder =[(NSNumber *)[managedObject valueForKey:ListOrderAttribute] longLongValue];
+    
+    return product;
+}
+
+/*
+ * Construct Company from its ManagedObject
+ */
+- (Company *) companyFromManagedObject:(NSManagedObject *)managedObject {
+    Company *company = [[Company alloc] init];
+
+    company.managedObjectURI = [[managedObject objectID] URIRepresentation];
+    company.name = [managedObject valueForKey:NameAttribute];
+    company.icon = [managedObject valueForKey:IconAttribute];
+    company.stockSymbol = [managedObject valueForKey:StockSymbolAttribute];
+    company.listOrder = [(NSNumber *)[managedObject valueForKey:ListOrderAttribute] longLongValue];
+    
+    /*
+    NSSet *productMOSet = [managedObject valueForKey:ProductsAttribute];
+    NSArray *productMOList = [productMOSet sortedArrayUsingDescriptors:@[self.sortByListOrder]];
+    NSMutableArray<Product *> *products = [[NSMutableArray alloc] init];
+    
+    for(NSManagedObject *productMO in productMOList) {
+        [products addObject: [self productFromManagedObject:productMO]];
+    }
+    
+    [company setProducts:products];
+     */
+    
     return company;
 }
 
-- (void) addCompany:(Company *)company completionBlock:(void (^)(void))completionBlock {
-    if ([self saveCompany]) {
-        [super addCompany:company completionBlock:completionBlock];
+/*
+ * Get the ManagedObject from URI
+ */
+- (NSManagedObject *) managedObjectFromURI:(NSURL *)URI {
+    NSPersistentStoreCoordinator *psc = [self.managedObjectContext persistentStoreCoordinator];
+    NSManagedObjectID *managedObjecID = [psc managedObjectIDForURIRepresentation:URI];
+    return [self.managedObjectContext objectWithID:managedObjecID];
+}
+
+/*
+ * Fetch ManagedObject for given entity and predicate
+ */
+- (NSArray *) fetchManagedObjectForEntity:(NSString *)entityName predicate:(NSPredicate *)predicate {
+    NSEntityDescription *entity = [NSEntityDescription entityForName: entityName
+                                              inManagedObjectContext: [self managedObjectContext]];
+    
+    NSSortDescriptor *sortByListOrder = [NSSortDescriptor sortDescriptorWithKey:ListOrderAttribute ascending:YES];
+
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:entity];
+    [request setPredicate:predicate];
+    [request setSortDescriptors:@[sortByListOrder]];
+
+    NSError *error = nil;
+    NSArray *results = [self.managedObjectContext executeFetchRequest:request error:&error];
+    if (!results) {
+        NSLog(@"Error fetching Companies: %@\n%@", error.localizedDescription, error.userInfo);
+        return nil;
     }
+
+    return results;
 }
 
-- (void) moveCompanyFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex completionBlock:(void(^)(void))completion  {
-    [super moveCompanyFromIndex:fromIndex toIndex:toIndex completionBlock:nil];
-    if ([self saveCompany]) completion();
-}
-
-- (void) updateCompany:(Company *)company completionBlock:(void (^)(void))completionBlock {
-    if ([self saveCompany]) {
-        [super updateCompany:company completionBlock:completionBlock];
-    }
-}
-
-- (BOOL) saveCompany {
+/*
+ * Save any changes in the managed object context
+ */
+- (BOOL) save {
     if (![self.managedObjectContext hasChanges]) {
         NSLog(@"ManagedObjectContest hasNoChanges");
         return YES;
     }
     
     NSError *error;
-    BOOL success = [self.managedObjectContext save:&error];
-    
-    if (!success) {
+    if (![self.managedObjectContext save:&error]) {
         NSLog(@"Error saving: %@\n%@", error.localizedDescription, error.userInfo);
+        return NO;
     }
     
-    return success;
+    return YES;
 }
+
+
+// MARK: Company methods
+/*
+ * Fetch all the Companies in Managed Object Store
+ */
+- (void) loadCompanyList:(void (^)(void))completionBlock {
+    NSArray *managedObjects = [self fetchManagedObjectForEntity:CompanyEntity predicate:nil];
+    NSAssert(managedObjects != nil, @"Error: Failed to load 'Company' managed objects");
+    
+    NSMutableArray<Company *> *companyList = [[NSMutableArray alloc] init];
+    for(NSManagedObject *companyMO in managedObjects) {
+        [companyList addObject: [self companyFromManagedObject:companyMO]];
+    }
+    
+    [super setCompanyList:companyList];
+    
+    completionBlock();
+}
+
+/*
+ * Delete a Company and update the listOrder of the following Companies
+ */
+- (void) deleteCompanyAtIndex:(NSInteger)index {
+    Company *company = [super getCompanyAtIndex:index];
+    NSURL *URI = company.managedObjectURI;
+    NSUInteger listOrder = company.listOrder;
+    
+    [super deleteCompanyAtIndex:index];
+    [self.managedObjectContext deleteObject:[self managedObjectFromURI:URI]];
+    
+    NSNumber *listOrderNum = [NSNumber numberWithUnsignedInteger:listOrder];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K > %@", ListOrderAttribute, listOrderNum];
+    
+    NSArray *companyMOList = [self fetchManagedObjectForEntity:CompanyEntity predicate:predicate];
+    
+    for(NSManagedObject *companyMO in companyMOList) {
+        [companyMO setValue:[NSNumber numberWithUnsignedInteger:listOrder++]
+                                                         forKey:ListOrderAttribute];
+    }
+    
+    [self save];
+}
+
+/*
+ * Add a Company to local store and to managed object store
+ */
+- (void) addCompany:(Company *)company completionBlock:(void (^)(void))completionBlock {
+    company.listOrder = [[super getCompanyList] count];
+    NSManagedObject *companyMO = [self createManagedObjectFromCompany:company];
+    
+    if ([self save]) {
+        company.managedObjectURI = companyMO.objectID.URIRepresentation;
+        [super addCompany:company completionBlock:completionBlock];
+    }
+}
+
+/*
+ * Update Company in local store and managed object store
+ */
+- (void) updateCompany:(Company *)company completionBlock:(void (^)(void))completionBlock {
+    NSManagedObject *companyMO = [self managedObjectFromURI:company.managedObjectURI];
+    
+    [companyMO setValue:company.name forKey:NameAttribute];
+    [companyMO setValue:company.icon forKey:IconAttribute];
+    [companyMO setValue:company.stockSymbol forKey:StockSymbolAttribute];
+    
+    if ([self save]) {
+        [super updateCompany:company completionBlock:completionBlock];
+    }
+}
+
+/*
+ * Change Company's listOrder
+ */
+- (void) moveCompanyFromIndex: (NSInteger)fromIndex
+                      toIndex: (NSInteger)toIndex
+              completionBlock: (void(^)(void))completionBlock  {
+    if (toIndex == fromIndex) return;
+    
+    [super moveCompanyFromIndex:fromIndex toIndex:toIndex completionBlock:nil];
+    
+    NSUInteger lowerIndex = (toIndex < fromIndex) ? toIndex : fromIndex;
+    NSUInteger upperIndex = (toIndex < fromIndex) ? fromIndex : toIndex;
+    
+    for (NSUInteger i = lowerIndex; i <= upperIndex; i++) {
+        Company *company = [super getCompanyAtIndex:i];
+        NSManagedObject *companyMO = [self managedObjectFromURI:company.managedObjectURI];
+        
+        [companyMO setValue:[NSNumber numberWithUnsignedInteger:company.listOrder]
+                     forKey:ListOrderAttribute];
+    }
+    
+    if ([self save]) completionBlock();
+}
+
 
 - (void) undoCompany: (void(^)(void))completion {
     [self.managedObjectContext undo];
-    if ([self saveCompany]) {
+    if ([self save]) {
         [self loadCompanyList:completion];
     }
 }
 
 - (void) redoCompany:(void(^)(void))completion {
     [self.managedObjectContext redo];
-    if ([self saveCompany]) {
+    if ([self save]) {
         [self loadCompanyList:completion];
     }
 }
@@ -162,132 +346,130 @@
 }
 
 
-
 // MARK: Product methods
-
+/*
+ * Load all products for the given Company from the Managed Object Store
+ */
 - (void) loadProductsForCompany:(Company *)company completionBlock:(void (^)(void))completionBlock {
-    NSEntityDescription *entity = [NSEntityDescription entityForName: [Product.class entityName]
-                                              inManagedObjectContext: self.managedObjectContext];
+    NSManagedObject *companyMO = [self managedObjectFromURI:company.managedObjectURI];
+    NSSet *productMOSet = [companyMO valueForKey:ProductsAttribute];
     
-    NSPredicate *ofCompany = [NSPredicate predicateWithFormat:@"company == %@", company];
-    NSSortDescriptor *sortByListOrder = [NSSortDescriptor sortDescriptorWithKey:@"listOrder" ascending:YES];
+    NSMutableArray *productList = [NSMutableArray arrayWithCapacity:productMOSet.count];
     
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    [request setEntity:entity];
-    [request setPredicate:ofCompany];
-    [request setSortDescriptors:@[sortByListOrder]];
-    
-    NSError *error = nil;
-    NSArray *result = [self.managedObjectContext executeFetchRequest:request error:&error];
-    
-    if (!result) {
-        NSLog(@"Error fetching Product: %@\n%@", error.localizedDescription, error.userInfo);
-        return;
+    for(NSManagedObject *productMO in productMOSet) {
+        Product *product = [self productFromManagedObject:productMO];
+        [productList addObject:product];
     }
     
-    if (!_products) _products = [[NSMutableArray alloc] init];
-    [self.products setArray:result];
+    NSSortDescriptor *sortByListOrder = [NSSortDescriptor sortDescriptorWithKey:ListOrderAttribute ascending:YES];
+
+    [productList sortUsingDescriptors:@[sortByListOrder]];
+    [company setProducts:productList];
     
-    completionBlock();
+    if (completionBlock) completionBlock();
 }
 
-- (NSArray *) getProductsByCompany:(NSString *)companyName {
-    return self.products;
-}
-
-- (Product *) getProductAtIndex:(NSInteger)index forCompanyName:(NSString *)companyName {
-    return [self.products objectAtIndex:index];
-}
-
-- (void) removeProductAtIndex:(NSInteger)index forCompanyName:(NSString *)companyName {
-    Product *product = [[self.products objectAtIndex:index] retain];
-    [self.managedObjectContext deleteObject:product];
+/*
+ * Delete a Product from a given Company
+ */
+- (void) removeProductAtIndex:(NSInteger)index forCompany:(Company *)company {
+    Product *product = [company productAtIndex:index];
+    NSURL *productURI = product.managedObjectURI;
+    NSUInteger listOrder = product.listOrder;
     
-    [self.products removeObjectAtIndex:index];
-    for(NSUInteger i = index; i < self.products.count; i++) {
-        self.products[i].listOrder--;
+    [company removeProductAtIndex:index];
+    [self.managedObjectContext deleteObject:[self managedObjectFromURI:productURI]];
+    
+    NSNumber *listOrderNum = [NSNumber numberWithUnsignedInteger:listOrder];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K > %@", ListOrderAttribute, listOrderNum];
+    
+    NSArray *productMOList = [self fetchManagedObjectForEntity:ProductEntity predicate:predicate];
+    for (NSManagedObject *productMO in productMOList) {
+        [productMO setValue: [NSNumber numberWithUnsignedInteger:listOrder++]
+                     forKey: ListOrderAttribute];
     }
     
-    [self saveProduct];
-    [product release];
+    [self save];
 }
 
-- (void) moveProductFromIndex:(NSInteger)fromIndex
-                      toIndex:(NSInteger)toIndex
-               forCompanyName:(NSString *)companyName
-              completionBlock:(void(^)(void))completionBlock {
+/*
+ * Update Product's listOrder between the given index
+ */
+- (void) moveProductFromIndex: (NSInteger)fromIndex
+                      toIndex: (NSInteger)toIndex
+                   forCompany: (Company *)company
+              completionBlock: (void(^)(void))completionBlock {
     
     if (fromIndex == toIndex) return;
     
-    Product *toProduct = [self.products objectAtIndex:toIndex];
-    NSUInteger toListOrder = toProduct.listOrder;
+    [company moveProductFromIndex:fromIndex toIndex:toIndex];
     
-    if (toIndex < fromIndex) {
-        for (NSUInteger i = toIndex; i < fromIndex; i++) {
-            [self.products objectAtIndex:i].listOrder++;
-        }
-    } else {
-        for (NSUInteger i = fromIndex + 1; i <= toIndex; i++) {
-            [self.products objectAtIndex:i].listOrder--;
-        }
+    NSUInteger lowerIndex = (toIndex < fromIndex) ? toIndex : fromIndex;
+    NSUInteger upperIndex = (toIndex < fromIndex) ? fromIndex : toIndex;
+    
+    for (NSUInteger i = lowerIndex; i <= upperIndex; i++) {
+        Product *product = [company productAtIndex:i];
+        NSManagedObject *productMO = [self managedObjectFromURI:product.managedObjectURI];
+        
+        [productMO setValue: [NSNumber numberWithUnsignedInteger:product.listOrder]
+                     forKey: ListOrderAttribute];
     }
     
-    Product *fromProduct = [[self.products objectAtIndex:fromIndex] retain];
-    fromProduct.listOrder = toListOrder;
-    
-    [self.products removeObjectAtIndex:fromIndex];
-    [self.products insertObject:fromProduct atIndex:toIndex];
-    
-    [fromProduct release];
-    
-    if ([self saveProduct]) completionBlock();
+    if ([self save]) completionBlock();
 }
 
-- (Product *) newProductForCompany: (Company *)company {
-    Product *product = [NSEntityDescription insertNewObjectForEntityForName:[Product.class entityName] inManagedObjectContext:self.managedObjectContext];
-    product.listOrder = self.products.count;
-    return product;
-}
-
-- (void) addProduct:(Product *)product forCompanyName:(NSString *)companyName completionBlock:(void (^)(void))completionBlock {
-    if ([self saveProduct]) {
-        [self.products addObject:product];
+/*
+ * Add a Product for a given Company to the local store and Managed Object store
+ */
+- (void) addProduct:(Product *)product forCompany:(Company *)company completionBlock:(void (^)(void))completionBlock {
+    [company addProduct:product];
+    
+    NSManagedObject *companyMO = [self managedObjectFromURI:company.managedObjectURI];
+    NSManagedObject *productMO = [self createManagedObjectFromProduct:product forCompanyManagedObject:companyMO];
+    
+    if ([self save]) {
+        product.managedObjectURI = productMO.objectID.URIRepresentation;
         completionBlock();
     }
 }
 
-- (void) updateProduct:(Product *)product forCompanyName:(NSString *)companyName completionBlock:(void (^)(void))completionBlock {
-    if ([self saveProduct]) {
+/*
+ * Update Product for a given Company in the Managed Object store
+ */
+- (void) updateProduct:(Product *)product forCompany:(Company *)company completionBlock:(void (^)(void))completionBlock {
+    NSManagedObject *productMO = [self managedObjectFromURI:product.managedObjectURI];
+    
+    [productMO setValue:product.name forKey:NameAttribute];
+    [productMO setValue:product.url forKey:URLAttribute];
+    
+    if ([self save]) {
         completionBlock();
     }
 }
 
-- (BOOL) saveProduct {
-    if (![self.managedObjectContext hasChanges]) {
-        NSLog(@"ManagedObjectContest hasNoChanges");
-        return YES;
-    }
-    
-    NSError *error;
-    BOOL success = [self.managedObjectContext save:&error];
-    
-    if (!success) {
-        NSLog(@"Error saving: %@\n%@", error.localizedDescription, error.userInfo);
-    }
-    
-    return success;
+
+ - (NSArray *) getProductsByCompany:(Company *)company {
+     if (!company.products) {
+         [self loadProductsForCompany:company completionBlock:nil];
+     }
+     return company.products;
 }
+ 
+ - (Product *) getProductAtIndex:(NSInteger)index forCompany:(Company *)company {
+     return [company.products objectAtIndex:index];
+ }
+
 
 - (void) undoProductForCompany: (Company *)company CompletionBlock: (void(^)(void))completion {
     [self.managedObjectContext undo];
-    if ([self saveProduct]) {
+    if ([self save]) {
         [self loadProductsForCompany:company completionBlock:completion];
     }
 }
 
 - (void) redoProductForCompany: (Company *)company CompletionBlock: (void(^)(void))completion {
     [self.managedObjectContext redo];
-    if ([self saveProduct]) {
+    if ([self save]) {
         [self loadProductsForCompany:company completionBlock:completion];
     }
 }
@@ -299,7 +481,5 @@
 - (BOOL) canRedoProduct {
     return [[self.managedObjectContext undoManager] canRedo];
 }
-
-
 
 @end

@@ -81,19 +81,19 @@
     
     if (self.product == nil) {
         NSAssert(_company != nil, @"ProductDetailViewController: company is nil");
-        _product  = [[NavCtrlDAO sharedInstance] newProductForCompany:self.company];
+        _product  = [[Product alloc] init];
         self.product.name = productName;
         self.product.url = productURL;
-        self.product.company = self.company;
+        //self.product.company = self.company;
         [[NavCtrlDAO sharedInstance] addProduct: self.product
-                                 forCompanyName: [self.company name]
+                                     forCompany: self.company
                                 completionBlock: self.completionHandler];
         
     } else {
         self.product.name = productName;
         self.product.url = productURL;
         
-        [[NavCtrlDAO sharedInstance] updateProduct:self.product forCompanyName:[self.company name]  completionBlock:self.completionHandler];
+        [[NavCtrlDAO sharedInstance] updateProduct:self.product forCompany:self.company completionBlock:self.completionHandler];
     }
     
     [self dismissViewControllerAnimated:YES completion:nil];

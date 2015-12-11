@@ -98,7 +98,7 @@
         [[NavCtrlDAO sharedInstance] updateCompany:self.company completionBlock:self.completionHandler];
         
     } else {
-        _company = [[NavCtrlDAO sharedInstance] newCompany];
+        _company = [[Company alloc] init];
 
         self.company.name = companyName;
         self.company.icon = companyLogo;

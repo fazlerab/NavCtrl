@@ -26,22 +26,19 @@
 
 @implementation CompanyViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
+- (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
-    
     if (self) {
         // Custom initialization
     }
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
 
     // Uncomment the following line to preserve selection between presentations.
-     self.clearsSelectionOnViewWillAppear = NO;
+    self.clearsSelectionOnViewWillAppear = NO;
  
     self.addButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
                                                                    target:self
@@ -71,8 +68,7 @@
     [self refreshView];
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -80,30 +76,31 @@
 - (void) refreshView {
     [self.tableView reloadData];
     
-    self.undoButton.enabled = [[NavCtrlDAO sharedInstance] canUndoCompany];
-    self.redoButton.enabled = [[NavCtrlDAO sharedInstance] canRedoCompany];
+    [self enableUndoRedoButtons];
     
     [[NavCtrlDAO sharedInstance] fetchStockQuotes:^{
         [self.tableView reloadData];
     }];
 }
 
+- (void) enableUndoRedoButtons {
+    self.undoButton.enabled = [[NavCtrlDAO sharedInstance] canUndoCompany];
+    self.redoButton.enabled = [[NavCtrlDAO sharedInstance] canRedoCompany];
+}
+
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // Return the number of sections.
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
     return [[[NavCtrlDAO sharedInstance] getCompanyList] count];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
@@ -124,9 +121,7 @@
     
     // Set company logo
     UIImage *image = [UIImage imageNamed:company.icon];
-    if (!image) {
-        image = [UIImage imageNamed:@"Sunflower.gif"];
-    }
+    if (!image) { image = [UIImage imageNamed:@"Sunflower.gif"]; }
     [[cell imageView] setImage:image];
     
     // Set stock price
@@ -139,21 +134,19 @@
 
 
 // Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     // Return NO if you do not want the specified item to be editable.
     return YES;
 }
 
 
 // Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
         [[NavCtrlDAO sharedInstance] deleteCompanyAtIndex:indexPath.row];
-        
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        [self enableUndoRedoButtons];
     }   
     else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
@@ -163,16 +156,14 @@
 
 
 // Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
     if (fromIndexPath.row == toIndexPath.row) return;
     [[NavCtrlDAO sharedInstance] moveCompanyFromIndex:fromIndexPath.row toIndex:toIndexPath.row completionBlock:^{ [self refreshView]; }];
 }
 
 
 // Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
     // Return NO if you do not want the item to be re-orderable.
     return YES;
 }
@@ -180,8 +171,7 @@
 
 #pragma mark - Table view delegate
 // In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     Company *company = [[NavCtrlDAO sharedInstance] getCompanyAtIndex:indexPath.row];
     [self openViewForSelectedObject:company];
 }
@@ -206,8 +196,8 @@
 
 - (void) handleAddCompany:(UIBarButtonItem *)sender {
     [self createDetailComanyViewController];
-    self.detailCompanyViewController.company = nil;
     
+    self.detailCompanyViewController.company = nil;
     self.detailCompanyViewController.completionHandler = ^{ [self refreshView]; };
     
     [self showDetailViewController:self.detailCompanyViewController.navigationController sender:self];

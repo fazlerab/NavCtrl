@@ -33,7 +33,6 @@
     return sharedInstance;
 }
 
-/* ------------------------------------------------------------------------------ */
 - (instancetype) init {
     self = [super init];
     if (self) {
@@ -46,11 +45,16 @@
 // MARK: Company methods
 - (void) loadCompanyList:(void (^)(void))completionBlock {
     [self loadData];
-    completionBlock();
+    if (completionBlock) completionBlock();
 }
 
-- (Company *) newCompany {
-    return nil;
+- (void) deleteCompanyAtIndex:(NSInteger)index {
+    [self.stockQuotes removeObjectForKey: [self getCompanyAtIndex:index].stockSymbol];
+    
+    [self.companies removeObjectAtIndex:index];
+    for (NSUInteger i = index; i < self.companies.count; i++) {
+        [self.companies objectAtIndex:i].listOrder--;
+    }
 }
 
 - (void) addCompany:(Company *)company completionBlock:(void (^)(void))completionBlock {
@@ -69,6 +73,31 @@
     completionBlock();
 }
 
+- (void) moveCompanyFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex completionBlock:(void(^)(void))completion {
+    if (fromIndex == toIndex) return;
+    
+    Company *companyAtToIndex = [self getCompanyAtIndex:toIndex];
+    NSUInteger toListOrder = companyAtToIndex.listOrder;
+    
+    if (toIndex < fromIndex) {
+        for (NSUInteger i = toIndex; i < fromIndex; i++) {
+            [self.companies objectAtIndex:i].listOrder++;
+        }
+    } else {
+        for (NSUInteger i = fromIndex + 1; i <= toIndex; i++) {
+            [self.companies objectAtIndex:i].listOrder--;
+        }
+    }
+    
+    Company *companyAtFromIndex = [[self getCompanyAtIndex:fromIndex] retain];
+    companyAtFromIndex.listOrder = toListOrder;
+    
+    [self.companies removeObjectAtIndex:fromIndex];
+    [self.companies insertObject:companyAtFromIndex atIndex:toIndex];
+    
+    [companyAtFromIndex release];
+}
+
 - (NSArray<Company *> *) getCompanyList {
     return self.companies;
 }
@@ -81,39 +110,6 @@
     return [self.companies objectAtIndex:index];
 }
 
-- (void) deleteCompanyAtIndex:(NSInteger)index {
-    [self.stockQuotes removeObjectForKey: [self getCompanyAtIndex:index].stockSymbol];
-    
-    [self.companies removeObjectAtIndex:index];
-    for (NSUInteger i = index; i < self.companies.count; i++) {
-        [self.companies objectAtIndex:i].listOrder--;
-    }
-}
-
-- (void) moveCompanyFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex completionBlock:(void(^)(void))completion {
-    if (fromIndex == toIndex) return;
-    
-    Company *toCompany = [self getCompanyAtIndex:toIndex];
-    NSUInteger toListOrder = toCompany.listOrder;
-    
-    if (toIndex < fromIndex) {
-        for (NSUInteger i = toIndex; i < fromIndex; i++) {
-            [self.companies objectAtIndex:i].listOrder++;
-        }
-    } else {
-        for (NSUInteger i = fromIndex + 1; i <= toIndex; i++) {
-            [self.companies objectAtIndex:i].listOrder--;
-        }
-    }
-    
-    Company *fromCompany = [[self getCompanyAtIndex:fromIndex] retain];
-    fromCompany.listOrder = toListOrder;
-    
-    [self.companies removeObjectAtIndex:fromIndex];
-    [self.companies insertObject:fromCompany atIndex:toIndex];
-    
-    [fromCompany release];
-}
 
 - (Company *) getCompanyByName:(NSString *)name {
     Company *c = nil;
@@ -135,35 +131,33 @@
 
 - (BOOL) canRedoCompany { return NO; }
 
-/* -------------------------------------------------------------------------------- */
-// MARK: Product methods
 
+// MARK: Product methods
 - (void) loadProductsForCompany:(Company *)company completionBlock:(void(^)(void))completionBlock { }
 
-- (Product *) newProductForCompany: (Company *)company {
-    return nil;
+- (void) removeProductAtIndex:(NSInteger)index forCompany:(Company *)company {
+    [company removeProductAtIndex:index];
 }
 
-- (void) addProduct:(Product *)product forCompanyName:(NSString *)companyName completionBlock:(void(^)(void))completionBlock {
-    Company *c = [self getCompanyByName:companyName];
-    [c addProduct:product];
+- (void) moveProductFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex forCompany:(Company *)company completionBlock:(void(^)(void))completionBlock {
+    [company moveProductFromIndex:fromIndex toIndex:toIndex];
+    if (completionBlock) completionBlock();
+}
+
+- (void) addProduct:(Product *)product forCompany:(Company *)company completionBlock:(void(^)(void))completionBlock {
+    [company addProduct:product];
     completionBlock();
 }
 
-- (void) updateProduct:(Product *)product forCompanyName:(NSString *)companyName completionBlock:(void (^)(void))completionBlock { }
+- (void) updateProduct:(Product *)product forCompany:(Company *)company completionBlock:(void (^)(void))completionBlock { }
 
-- (NSArray *) getProductsByCompany:(NSString *)companyName {
-    return nil;
+- (NSArray *) getProductsByCompany:(Company *)company {
+    return company.products;
 }
 
-- (Product *) getProductAtIndex:(NSInteger)index forCompanyName:(NSString *)companyName {
-    NSArray *productList = [self getProductsByCompany:companyName];
-    return [productList objectAtIndex:index];
+- (Product *) getProductAtIndex:(NSInteger)index forCompany:(Company *)company {
+    return [company.products objectAtIndex:index];
 }
-
-- (void) removeProductAtIndex:(NSInteger)index forCompanyName:(NSString *)companyName { }
-
-- (void) moveProductFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex forCompanyName:(NSString *)companyName completionBlock:(void(^)(void))completionBlock { }
 
 - (void) undoProductForCompany: (Company *)company CompletionBlock: (void(^)(void))completion { }
 
@@ -259,42 +253,45 @@
 /* ----------------------------------------------------------------------------------------------- */
 
 - (void) loadData {
-    /*
     @autoreleasepool {
+        NSUInteger i = 0;
         Company *company;
         
         company = [[[Company alloc] initWithName:@"Apple mobile devices" icon:@"apple.png"] autorelease];
         company.stockSymbol = @"AAPL";
-        [company addProduct:[[[Product alloc] initWithName:@"iPad Air 2" andURL:@"https://www.apple.com/ipad-air-2/"] autorelease]];
-        [company addProduct:[[[Product alloc] initWithName:@"Watch"      andURL:@"https://www.apple.com/watch/"] autorelease]];
-        [company addProduct:[[[Product alloc] initWithName:@"iPhone 6S"  andURL:@"https://www.apple.com/iphone-6s/"] autorelease]];
+        company.listOrder = i++;
+        [company addProduct:[[[Product alloc] initWithName:@"iPad Air 2" URL:@"https://www.apple.com/ipad-air-2/"] autorelease]];
+        [company addProduct:[[[Product alloc] initWithName:@"Watch"      URL:@"https://www.apple.com/watch/"]      autorelease]];
+        [company addProduct:[[[Product alloc] initWithName:@"iPhone 6S"  URL:@"https://www.apple.com/iphone-6s/"]  autorelease]];
         [self.companies addObject:company];
         
         
         company = [[[Company alloc] initWithName:@"Samsung mobile devices" icon:@"samsung.png"] autorelease];
         company.stockSymbol = @"SSNLF";
-        [company addProduct:[[[Product alloc] initWithName:@"Galaxy S6"   andURL:@"http://www.samsung.com/us/mobile/cell-phones/SM-G928VZDAVZW"] autorelease]];
-        [company addProduct:[[[Product alloc] initWithName:@"Galaxy Note" andURL:@"http://www.samsung.com/us/mobile/cell-phones/SM-N920TZKATMB"] autorelease]];
-        [company addProduct:[[[Product alloc] initWithName:@"Galaxy Tab"  andURL:@"http://www.samsung.com/us/mobile/galaxy-tab/SM-T810NZWEXAR"] autorelease]];
+        company.listOrder = i++;
+        [company addProduct:[[[Product alloc] initWithName:@"Galaxy S6"   URL:@"http://www.samsung.com/us/mobile/cell-phones/SM-G928VZDAVZW"] autorelease]];
+        [company addProduct:[[[Product alloc] initWithName:@"Galaxy Note" URL:@"http://www.samsung.com/us/mobile/cell-phones/SM-N920TZKATMB"] autorelease]];
+        [company addProduct:[[[Product alloc] initWithName:@"Galaxy Tab"  URL:@"http://www.samsung.com/us/mobile/galaxy-tab/SM-T810NZWEXAR"] autorelease]];
         [self.companies addObject:company];
         
         
         company = [[[Company alloc] initWithName:@"Motorola mobile devices" icon:@"motorola.png"] autorelease];
         company.stockSymbol = @"MSI";
-        [company addProduct:[[[Product alloc] initWithName:@"Moto X" andURL:@"https://www.motorola.com/us/products/moto-x-pure-edition"] autorelease]];
-        [company addProduct:[[[Product alloc] initWithName:@"Moto G" andURL:@"https://www.motorola.com/us/products/moto-g"] autorelease]];
-        [company addProduct:[[[Product alloc] initWithName:@"Moto E" andURL:@"https://www.motorola.com/us/smartphones/moto-e-2nd-gen/moto-e-2nd-gen.html"] autorelease]];
+        company.listOrder = i++;
+        [company addProduct:[[[Product alloc] initWithName:@"Moto X" URL:@"https://www.motorola.com/us/products/moto-x-pure-edition"] autorelease]];
+        [company addProduct:[[[Product alloc] initWithName:@"Moto G" URL:@"https://www.motorola.com/us/products/moto-g"] autorelease]];
+        [company addProduct:[[[Product alloc] initWithName:@"Moto E" URL:@"https://www.motorola.com/us/smartphones/moto-e-2nd-gen/moto-e-2nd-gen.html"] autorelease]];
         [self.companies addObject:company];
 
         
         company = [[[Company alloc] initWithName:@"LG mobile devices" icon:@"lg.jpg"] autorelease];
         company.stockSymbol = @"066570.KS";
-        [company addProduct:[[[Product alloc] initWithName:@"Nexus 5X"     andURL:@"https://www.google.com/nexus/5x/"] autorelease]];
-        [company addProduct:[[[Product alloc] initWithName:@"G4"           andURL:@"http://www.lg.com/us/mobile-phones/g4"] autorelease]];
-        [company addProduct:[[[Product alloc] initWithName:@"G Pad X 10.1" andURL:@"http://www.lg.com/us/tablets/lg-V930-g-pad-x-10.1"] autorelease]];
+        company.listOrder = i++;
+        [company addProduct:[[[Product alloc] initWithName:@"Nexus 5X"     URL:@"https://www.google.com/nexus/5x/"] autorelease]];
+        [company addProduct:[[[Product alloc] initWithName:@"G4"           URL:@"http://www.lg.com/us/mobile-phones/g4"] autorelease]];
+        [company addProduct:[[[Product alloc] initWithName:@"G Pad X 10.1" URL:@"http://www.lg.com/us/tablets/lg-V930-g-pad-x-10.1"] autorelease]];
         [self.companies addObject:company];
     }
-     */
 }
 
 - (void) dealloc {

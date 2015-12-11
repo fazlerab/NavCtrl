@@ -3,26 +3,29 @@
 //  NavCtrl
 //
 //  Created by Imran on 11/30/15.
-//  Copyright © 2015 Aditya Narayan. All rights reserved.
+//  Copyright © 2015 Fazle Rab. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
 
 @class Product;
 
-NS_ASSUME_NONNULL_BEGIN
+@interface Company : NSObject
 
-@interface Company : NSManagedObject
+@property (nonatomic, retain) NSURL *managedObjectURI;
+@property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) NSString *icon;
+@property (nonatomic, retain) NSString *stockSymbol;
+@property (nonatomic) NSUInteger listOrder;
+@property (nonatomic, retain) NSArray<Product *> *products;
 
-// Insert code here to declare functionality of your managed object subclass
-+ (NSString *) entityName;
+- (instancetype) initWithName:(NSString *)name icon:(NSString *)icon stockSymbol:(NSString *)stockSymbol listOrder:(NSUInteger)listOrder;
+- (instancetype) initWithName:(NSString *)name icon:(NSString *)icon;
 
 - (void)addProduct:(Product *)product;
-- (void)removeProduct:(Product *)product;
-
+- (void)removeProductAtIndex:(NSUInteger)index;
+- (Product *)productAtIndex:(NSUInteger)index;
+- (void)moveProductFromIndex:(NSUInteger)fromIndex toIndex:(NSUInteger)toIndex;
 @end
 
-NS_ASSUME_NONNULL_END
 
-#import "Company+CoreDataProperties.h"

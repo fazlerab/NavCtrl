@@ -7,19 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreData/CoreData.h>
 
 @class Company;
 
-NS_ASSUME_NONNULL_BEGIN
+@interface Product : NSObject
 
-@interface Product : NSManagedObject
+@property (nonatomic, retain) NSURL *managedObjectURI;
+@property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) NSString *url;
+@property (nonatomic) NSUInteger listOrder;
 
-// Insert code here to declare functionality of your managed object subclass
-+ (NSString *) entityName;
+- (instancetype) initWithName:(NSString *)name URL:(NSString *)url;
+- (instancetype) initWithName:(NSString *)name URL:(NSString *)url listOrder:(NSUInteger)listOrder;
 
 @end
-
-NS_ASSUME_NONNULL_END
-
-#import "Product+CoreDataProperties.h"

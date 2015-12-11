@@ -35,8 +35,7 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     // Uncomment the following line to preserve selection between presentations.
      self.clearsSelectionOnViewWillAppear = NO;
@@ -60,14 +59,17 @@
     }];
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
 - (void) refreshView {
     [self.tableView reloadData];
+    [self enableUndoRedoButtons];
+}
+
+- (void) enableUndoRedoButtons {
     self.undoButton.enabled = [[NavCtrlDAO sharedInstance] canUndoProduct];
     self.redoButton.enabled = [[NavCtrlDAO sharedInstance] canRedoProduct];
 }
@@ -76,10 +78,8 @@
     Product *product = (Product *)object;
     cell.textLabel.text = product.name;
     
-    UIImage *image = [UIImage imageNamed:product.company.icon];
-    if (!image) {
-        image = [UIImage imageNamed:@"Sunflower.gif"];
-    }
+    UIImage *image = [UIImage imageNamed:self.company.icon];
+    if (!image) { image = [UIImage imageNamed:@"Sunflower.gif"]; }
     [[cell imageView] setImage:image];
     
     // Show disclosure and detail acssory buttons
@@ -113,14 +113,13 @@
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
 - (NSInteger) tableView: (UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return [[[NavCtrlDAO sharedInstance] getProductsByCompany:self.title] count];
+    return [[[NavCtrlDAO sharedInstance] getProductsByCompany:self.company] count];
 }
 
 - (UITableViewCell *) tableView:(UITableView *) tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -130,28 +129,28 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     // Configure the cell...
-    Product *product = [[NavCtrlDAO sharedInstance] getProductAtIndex:indexPath.row forCompanyName:self.title];
+    Product *product = [[NavCtrlDAO sharedInstance] getProductAtIndex:indexPath.row forCompany:self.company];
     
     return [self configureCell:cell ForObject:product AtIndex:indexPath.row];
 }
 
 
 // Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     // Return NO if you do not want the specified item to be editable.
     return YES;
 }
 
 
 // Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
-        [[NavCtrlDAO sharedInstance] removeProductAtIndex:indexPath.row forCompanyName:self.title];
+        [[NavCtrlDAO sharedInstance] removeProductAtIndex:indexPath.row forCompany:self.company];
         
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        
+        [self enableUndoRedoButtons];
     }
     else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
@@ -166,14 +165,13 @@
     
     [[NavCtrlDAO sharedInstance] moveProductFromIndex: fromIndexPath.row
                                               toIndex: toIndexPath.row
-                                       forCompanyName: self.title
+                                           forCompany: self.company
                                       completionBlock: ^{[self refreshView];}];
 }
 
 
 // Override to support conditional rearranging of the table view.
-- (BOOL) tableView: (UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (BOOL) tableView: (UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
     // Return NO if you do not want the item to be re-orderable.
     return YES;
 }
@@ -181,20 +179,19 @@
 
 #pragma mark - Table view delegate
 // In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     // Navigation logic may go here, for example:
     // Create the next view controller.
 
     // Pass the selected object to the new view controller.
-    id object = [[NavCtrlDAO sharedInstance] getProductAtIndex:indexPath.row forCompanyName:self.title];
+    id object = [[NavCtrlDAO sharedInstance] getProductAtIndex:indexPath.row forCompany:self.company];
     [self openWebViewForSelectedObject:object];
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
     [self createDetailViewController];
     
-    Product *product = [[NavCtrlDAO sharedInstance] getProductAtIndex:indexPath.row forCompanyName:self.title];
+    Product *product = [[NavCtrlDAO sharedInstance] getProductAtIndex:indexPath.row forCompany:self.company];
     
     self.detailViewController.product = product;
     self.detailViewController.company = self.company;

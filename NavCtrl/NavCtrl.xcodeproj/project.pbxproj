@@ -18,8 +18,6 @@
 		1DA54CF71C0D0D4500F22E1B /* NavCtrlModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1DA54CF51C0D0D4500F22E1B /* NavCtrlModel.xcdatamodeld */; };
 		1DA54D011C0D12DC00F22E1B /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DA54CFB1C0D12DC00F22E1B /* Product.m */; };
 		1DA54D031C0D12DC00F22E1B /* Company.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DA54CFF1C0D12DC00F22E1B /* Company.m */; };
-		1DA54D141C0D1B5700F22E1B /* Product+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DA54D111C0D1B5700F22E1B /* Product+CoreDataProperties.m */; };
-		1DA54D151C0D1B5700F22E1B /* Company+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DA54D131C0D1B5700F22E1B /* Company+CoreDataProperties.m */; };
 		1DA54D181C0D1DC100F22E1B /* CoreDataDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DA54D171C0D1DC100F22E1B /* CoreDataDAO.m */; };
 		1DF5A03A1BDE881900B51945 /* lg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1DF5A0391BDE881900B51945 /* lg.jpg */; };
 		1DF5A03E1BDE8C0600B51945 /* samsung.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DF5A03D1BDE8C0600B51945 /* samsung.png */; };
@@ -72,10 +70,6 @@
 		1DA54CFB1C0D12DC00F22E1B /* Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Product.m; sourceTree = "<group>"; };
 		1DA54CFE1C0D12DC00F22E1B /* Company.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Company.h; sourceTree = "<group>"; };
 		1DA54CFF1C0D12DC00F22E1B /* Company.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Company.m; sourceTree = "<group>"; };
-		1DA54D101C0D1B5700F22E1B /* Product+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Product+CoreDataProperties.h"; sourceTree = "<group>"; };
-		1DA54D111C0D1B5700F22E1B /* Product+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Product+CoreDataProperties.m"; sourceTree = "<group>"; };
-		1DA54D121C0D1B5700F22E1B /* Company+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Company+CoreDataProperties.h"; sourceTree = "<group>"; };
-		1DA54D131C0D1B5700F22E1B /* Company+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Company+CoreDataProperties.m"; sourceTree = "<group>"; };
 		1DA54D161C0D1DC100F22E1B /* CoreDataDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataDAO.h; sourceTree = "<group>"; };
 		1DA54D171C0D1DC100F22E1B /* CoreDataDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataDAO.m; sourceTree = "<group>"; };
 		1DF5A0391BDE881900B51945 /* lg.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = lg.jpg; sourceTree = "<group>"; };
@@ -139,12 +133,8 @@
 				1DA54D161C0D1DC100F22E1B /* CoreDataDAO.h */,
 				1DA54D171C0D1DC100F22E1B /* CoreDataDAO.m */,
 				1DA54CF51C0D0D4500F22E1B /* NavCtrlModel.xcdatamodeld */,
-				1DA54D101C0D1B5700F22E1B /* Product+CoreDataProperties.h */,
-				1DA54D111C0D1B5700F22E1B /* Product+CoreDataProperties.m */,
 				1DA54CFA1C0D12DC00F22E1B /* Product.h */,
 				1DA54CFB1C0D12DC00F22E1B /* Product.m */,
-				1DA54D121C0D1B5700F22E1B /* Company+CoreDataProperties.h */,
-				1DA54D131C0D1B5700F22E1B /* Company+CoreDataProperties.m */,
 				1DA54CFE1C0D12DC00F22E1B /* Company.h */,
 				1DA54CFF1C0D12DC00F22E1B /* Company.m */,
 			);
@@ -374,14 +364,12 @@
 			files = (
 				1DA54CF71C0D0D4500F22E1B /* NavCtrlModel.xcdatamodeld in Sources */,
 				1D88552B1BE7B913008A88C1 /* NavCtrlDAO.m in Sources */,
-				1DA54D141C0D1B5700F22E1B /* Product+CoreDataProperties.m in Sources */,
 				48A656E618163C1B00746D36 /* CompanyViewController.m in Sources */,
 				1D6BF9841BDF215C0035A30E /* ProductWebViewController.m in Sources */,
 				1DA54D181C0D1DC100F22E1B /* CoreDataDAO.m in Sources */,
 				1D68582D1BE94AE000BB0F42 /* ProductDetailViewController.m in Sources */,
 				48A656C518163BF200746D36 /* NavControllerAppDelegate.m in Sources */,
 				48A656C118163BF200746D36 /* main.m in Sources */,
-				1DA54D151C0D1B5700F22E1B /* Company+CoreDataProperties.m in Sources */,
 				1DA54D011C0D12DC00F22E1B /* Product.m in Sources */,
 				1D88552F1BE81BA4008A88C1 /* CompanyDetailViewController.m in Sources */,
 				48A656EB18163F8700746D36 /* ProductViewController.m in Sources */,
