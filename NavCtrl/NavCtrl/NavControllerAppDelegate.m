@@ -7,7 +7,7 @@
 //
 
 #import "NavControllerAppDelegate.h"
-#import "CompanyViewController.h"
+#import "CompanyCollectionViewController.h"
 #import "NavCtrlDAO.h"
 
 @implementation NavControllerAppDelegate
@@ -15,8 +15,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
-    CompanyViewController *companyViewController = [[[CompanyViewController alloc]
-                                               initWithNibName:@"CompanyViewController" bundle:nil] autorelease];
+    CompanyCollectionViewController *companyViewController = [[[CompanyCollectionViewController alloc]
+                                               initWithNibName:@"CompanyCollectionViewController" bundle:nil] autorelease];
 
     self.navigationController = [[[UINavigationController alloc]
                                  initWithRootViewController:companyViewController] autorelease];

@@ -15,10 +15,16 @@
 		1D88552B1BE7B913008A88C1 /* NavCtrlDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D88552A1BE7B913008A88C1 /* NavCtrlDAO.m */; };
 		1D88552F1BE81BA4008A88C1 /* CompanyDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D88552D1BE81BA4008A88C1 /* CompanyDetailViewController.m */; };
 		1D8855301BE81BA4008A88C1 /* CompanyDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1D88552E1BE81BA4008A88C1 /* CompanyDetailViewController.xib */; };
+		1D8CE58F1C206ADA00CA11BE /* NCCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D8CE58D1C206ADA00CA11BE /* NCCollectionViewCell.m */; };
+		1D8CE5901C206ADA00CA11BE /* NCCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1D8CE58E1C206ADA00CA11BE /* NCCollectionViewCell.xib */; };
+		1D8CE5951C20C8D900CA11BE /* ProductCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D8CE5931C20C8D900CA11BE /* ProductCollectionViewController.m */; };
+		1D8CE5961C20C8D900CA11BE /* ProductCollectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1D8CE5941C20C8D900CA11BE /* ProductCollectionViewController.xib */; };
 		1DA54CF71C0D0D4500F22E1B /* NavCtrlModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1DA54CF51C0D0D4500F22E1B /* NavCtrlModel.xcdatamodeld */; };
 		1DA54D011C0D12DC00F22E1B /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DA54CFB1C0D12DC00F22E1B /* Product.m */; };
 		1DA54D031C0D12DC00F22E1B /* Company.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DA54CFF1C0D12DC00F22E1B /* Company.m */; };
 		1DA54D181C0D1DC100F22E1B /* CoreDataDAO.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DA54D171C0D1DC100F22E1B /* CoreDataDAO.m */; };
+		1DE0E1FC1C1F760B00B3C13A /* CompanyCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DE0E1FA1C1F760B00B3C13A /* CompanyCollectionViewController.m */; };
+		1DE0E1FD1C1F760B00B3C13A /* CompanyCollectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DE0E1FB1C1F760B00B3C13A /* CompanyCollectionViewController.xib */; };
 		1DF5A03A1BDE881900B51945 /* lg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1DF5A0391BDE881900B51945 /* lg.jpg */; };
 		1DF5A03E1BDE8C0600B51945 /* samsung.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DF5A03D1BDE8C0600B51945 /* samsung.png */; };
 		1DF5A0421BDE8E0D00B51945 /* motorola.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DF5A0411BDE8E0D00B51945 /* motorola.png */; };
@@ -65,6 +71,13 @@
 		1D88552C1BE81BA4008A88C1 /* CompanyDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompanyDetailViewController.h; sourceTree = "<group>"; };
 		1D88552D1BE81BA4008A88C1 /* CompanyDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompanyDetailViewController.m; sourceTree = "<group>"; };
 		1D88552E1BE81BA4008A88C1 /* CompanyDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CompanyDetailViewController.xib; sourceTree = "<group>"; };
+		1D8CE58C1C206ADA00CA11BE /* NCCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NCCollectionViewCell.h; sourceTree = "<group>"; };
+		1D8CE58D1C206ADA00CA11BE /* NCCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NCCollectionViewCell.m; sourceTree = "<group>"; };
+		1D8CE58E1C206ADA00CA11BE /* NCCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NCCollectionViewCell.xib; sourceTree = "<group>"; };
+		1D8CE5921C20C8D900CA11BE /* ProductCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductCollectionViewController.h; sourceTree = "<group>"; };
+		1D8CE5931C20C8D900CA11BE /* ProductCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductCollectionViewController.m; sourceTree = "<group>"; };
+		1D8CE5941C20C8D900CA11BE /* ProductCollectionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProductCollectionViewController.xib; sourceTree = "<group>"; };
+		1DA191F81C2314E000612748 /* NCCollectionViewCellActionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NCCollectionViewCellActionDelegate.h; sourceTree = "<group>"; };
 		1DA54CF61C0D0D4500F22E1B /* NavCtrlModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NavCtrlModel.xcdatamodel; sourceTree = "<group>"; };
 		1DA54CFA1C0D12DC00F22E1B /* Product.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Product.h; sourceTree = "<group>"; };
 		1DA54CFB1C0D12DC00F22E1B /* Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Product.m; sourceTree = "<group>"; };
@@ -72,6 +85,9 @@
 		1DA54CFF1C0D12DC00F22E1B /* Company.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Company.m; sourceTree = "<group>"; };
 		1DA54D161C0D1DC100F22E1B /* CoreDataDAO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataDAO.h; sourceTree = "<group>"; };
 		1DA54D171C0D1DC100F22E1B /* CoreDataDAO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataDAO.m; sourceTree = "<group>"; };
+		1DE0E1F91C1F760B00B3C13A /* CompanyCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompanyCollectionViewController.h; sourceTree = "<group>"; };
+		1DE0E1FA1C1F760B00B3C13A /* CompanyCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompanyCollectionViewController.m; sourceTree = "<group>"; };
+		1DE0E1FB1C1F760B00B3C13A /* CompanyCollectionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CompanyCollectionViewController.xib; sourceTree = "<group>"; };
 		1DF5A0391BDE881900B51945 /* lg.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = lg.jpg; sourceTree = "<group>"; };
 		1DF5A03D1BDE8C0600B51945 /* samsung.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = samsung.png; sourceTree = "<group>"; };
 		1DF5A0411BDE8E0D00B51945 /* motorola.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = motorola.png; sourceTree = "<group>"; };
@@ -139,6 +155,23 @@
 				1DA54CFF1C0D12DC00F22E1B /* Company.m */,
 			);
 			name = DAO;
+			sourceTree = "<group>";
+		};
+		1D8CE5911C20C82700CA11BE /* CollectionViews */ = {
+			isa = PBXGroup;
+			children = (
+				1DE0E1F91C1F760B00B3C13A /* CompanyCollectionViewController.h */,
+				1DE0E1FA1C1F760B00B3C13A /* CompanyCollectionViewController.m */,
+				1DE0E1FB1C1F760B00B3C13A /* CompanyCollectionViewController.xib */,
+				1DA191F81C2314E000612748 /* NCCollectionViewCellActionDelegate.h */,
+				1D8CE58C1C206ADA00CA11BE /* NCCollectionViewCell.h */,
+				1D8CE58D1C206ADA00CA11BE /* NCCollectionViewCell.m */,
+				1D8CE58E1C206ADA00CA11BE /* NCCollectionViewCell.xib */,
+				1D8CE5921C20C8D900CA11BE /* ProductCollectionViewController.h */,
+				1D8CE5931C20C8D900CA11BE /* ProductCollectionViewController.m */,
+				1D8CE5941C20C8D900CA11BE /* ProductCollectionViewController.xib */,
+			);
+			name = CollectionViews;
 			sourceTree = "<group>";
 		};
 		483796CB1BCBF7A00062D5AB /* AppDelegate */ = {
@@ -214,6 +247,7 @@
 			children = (
 				483796CB1BCBF7A00062D5AB /* AppDelegate */,
 				1D0A94361BE2D00800599B4D /* DAO */,
+				1D8CE5911C20C82700CA11BE /* CollectionViews */,
 				483796CC1BCBF7C70062D5AB /* ParentViewController */,
 				483796CD1BCBF7EB0062D5AB /* ProductViewController */,
 				48A656C618163BF200746D36 /* Images.xcassets */,
@@ -335,14 +369,17 @@
 			files = (
 				1DF5A03A1BDE881900B51945 /* lg.jpg in Resources */,
 				48A656EE1816468000746D36 /* Sunflower.gif in Resources */,
+				1DE0E1FD1C1F760B00B3C13A /* CompanyCollectionViewController.xib in Resources */,
 				1D7C847E1BFD186F00246776 /* navctrl.db in Resources */,
 				48A656E718163C1B00746D36 /* CompanyViewController.xib in Resources */,
 				1DF5A0421BDE8E0D00B51945 /* motorola.png in Resources */,
 				1DF5A03E1BDE8C0600B51945 /* samsung.png in Resources */,
+				1D8CE5901C206ADA00CA11BE /* NCCollectionViewCell.xib in Resources */,
 				48A656BF18163BF200746D36 /* InfoPlist.strings in Resources */,
 				1D8855301BE81BA4008A88C1 /* CompanyDetailViewController.xib in Resources */,
 				1DF5A0441BDE8EC700B51945 /* apple.png in Resources */,
 				48A656C718163BF200746D36 /* Images.xcassets in Resources */,
+				1D8CE5961C20C8D900CA11BE /* ProductCollectionViewController.xib in Resources */,
 				1D68582E1BE94AE000BB0F42 /* ProductDetailViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -363,12 +400,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				1DA54CF71C0D0D4500F22E1B /* NavCtrlModel.xcdatamodeld in Sources */,
+				1D8CE58F1C206ADA00CA11BE /* NCCollectionViewCell.m in Sources */,
 				1D88552B1BE7B913008A88C1 /* NavCtrlDAO.m in Sources */,
 				48A656E618163C1B00746D36 /* CompanyViewController.m in Sources */,
 				1D6BF9841BDF215C0035A30E /* ProductWebViewController.m in Sources */,
 				1DA54D181C0D1DC100F22E1B /* CoreDataDAO.m in Sources */,
 				1D68582D1BE94AE000BB0F42 /* ProductDetailViewController.m in Sources */,
+				1D8CE5951C20C8D900CA11BE /* ProductCollectionViewController.m in Sources */,
 				48A656C518163BF200746D36 /* NavControllerAppDelegate.m in Sources */,
+				1DE0E1FC1C1F760B00B3C13A /* CompanyCollectionViewController.m in Sources */,
 				48A656C118163BF200746D36 /* main.m in Sources */,
 				1DA54D011C0D12DC00F22E1B /* Product.m in Sources */,
 				1D88552F1BE81BA4008A88C1 /* CompanyDetailViewController.m in Sources */,
