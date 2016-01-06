@@ -11,3 +11,8 @@
 @interface CoreDataDAO : NavCtrlDAO
 
 @end
+
+@interface AFCSVResponseSerializer : AFHTTPResponseSerializer
+- (instancetype)init;
+@end
+

@@ -7,16 +7,18 @@
 //
 
 #import <Foundation/Foundation.h>
-//#import "NavCtrlDAO.h"
+#import "NavCtrlDAO.h"
 #import "CoreDataDAO.h"
 #import "Company.h"
 #import "Product.h"
 
-@interface NavCtrlDAO() {
-    NSURLSession *_session;
+
+@interface NavCtrlDAO()
+{
+    NSMutableDictionary *_stockQuotes;
 }
 @property (nonatomic, retain) NSMutableArray<Company *> *companies;
-@property (nonatomic, retain) NSMutableDictionary *stockQuotes;
+@property (nonatomic, retain) NSURLSession *session;
 
 @end
 
@@ -49,7 +51,7 @@
 }
 
 - (void) deleteCompanyAtIndex:(NSInteger)index {
-    [self.stockQuotes removeObjectForKey: [self getCompanyAtIndex:index].stockSymbol];
+    [_stockQuotes removeObjectForKey: [self getCompanyAtIndex:index].stockSymbol];
     
     [self.companies removeObjectAtIndex:index];
     for (NSUInteger i = index; i < self.companies.count; i++) {
@@ -170,29 +172,46 @@
 
 /* -------------------------------------------------------------------------------------------- */
 // MARK: Fetch Stock Quotes Methods
-// Fetches stock quotes of all the Compamy at once
-- (void) fetchStockQuotes: (void(^)(void))fetchDidFinish {
-    if (!self.companies || self.companies.count == 0) return;
+
+- (NSString *) allStockSymbols {
+    NSMutableString *symbols = nil;
     
-    // Build a string of stock symbols by concatenating symbol from each company with '+' in between.
-    NSMutableString *symbols = [[NSMutableString alloc] init];
-    [self.companies enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        Company *company = (Company *)obj;
+    if (self.companies && self.companies.count > 0) {
+    
+        // Build a string of stock symbols by concatenating symbol from each company with '+' in between.
+        symbols = [[NSMutableString alloc] init];
         
-        if (company.stockSymbol && ![company.stockSymbol isEqualToString:@""]) {
-            if (symbols.length == 0) {
-                [symbols appendString:company.stockSymbol];
-            } else {
-                [symbols appendString:@"+"];
-                [symbols appendString:company.stockSymbol];
+        [self.companies enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            Company *company = (Company *)obj;
+            
+            if (company.stockSymbol && ![company.stockSymbol isEqualToString:@""]) {
+                if (symbols.length == 0) {
+                    [symbols appendString:company.stockSymbol];
+                } else {
+                    [symbols appendString:@"+"];
+                    [symbols appendString:company.stockSymbol];
+                }
             }
-        }
-    }];
+        }];
     
+        [symbols autorelease];
+    }
+    
+    return symbols;
+}
+
+/* 
+ * Fetches stock quotes of all the Compamy at once
+ *
+ * Yahoo Parameters: s=Ticker Symbol, l=Last Trade Price with Time
+ */
+- (void) fetchStockQuotes: (void(^)(void))fetchDidFinish {
+    
+    NSString *symbols = [self allStockSymbols];
+    if (!symbols) return;
     
     // Fetch stock quotes from finance.yahoo.com
-    NSString *URLString = [NSString stringWithFormat:@"http://finance.yahoo.com/d/quotes.csv?s=%@&f=sal1", symbols];
-    [symbols release];
+    NSString *URLString = [NSString stringWithFormat:@"http://finance.yahoo.com/d/quotes.csv?s=%@&f=sl", symbols];
     
     //NSLog(@"URLString: %@", URLString);
     NSURL *URL = [NSURL URLWithString:URLString];
@@ -212,41 +231,58 @@
         ^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
             
             if (!error && [response.MIMEType isEqualToString:@"text/plain"]) {
-                NSString *dataStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                //NSLog(@"data: %@", dataStr);
-                
-                NSArray *csvList = [dataStr componentsSeparatedByString:@"\n"];
-                [dataStr release];
-                
-                NSArray *values;
-                NSString *symbol, *price;
-                
-                for (NSString *csv in csvList) {
-                    //NSLog(@"csv: %@", csv);
-                    if ([csv isEqualToString:@""]) continue;
-                    
-                    values = [csv componentsSeparatedByString:@","];
-                    //NSLog(@"values: [%@, %@, %@]", values[0], values[1], values[2]);
-                    
-                    symbol = [values[0] stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                    price = [values[1] isEqualToString:@"N/A"] ? values[2] : values[1] ;
-                    
-                    [self.stockQuotes setObject:price forKey:symbol];
-                }
+                NSDictionary *stockQuotes = [self parseCSVData:data];
+                [self setStockQuotes:stockQuotes];
                 
                 // Let the caller know that fetch has finished and stockQuotes have been updated.
                 if (fetchDidFinish) fetchDidFinish();
             } else {
-                NSLog(@"CompanyDAO.fetchStockQuotes - Error: %@",
+                NSLog(@"fetchStockQuotes - Error: %@",
                       error ? error.localizedDescription: response.MIMEType);
             }
             //NSLog(@"fetchStockQuotes: Is in mainQueue: %@", [NSThread isMainThread] ? @"YES" : @"NO");
         }];
+    
     [dataTask resume];
+}
+
+- (NSDictionary *) parseCSVData:(NSData *)csvData {
+    NSString *csvString = [[NSString alloc] initWithData:csvData encoding:NSUTF8StringEncoding];
+    NSLog(@"Data: %@", csvString);
+    
+    NSArray *csvList = [csvString componentsSeparatedByString:@"\n"];
+    [csvString release];
+    
+    NSArray *values;
+    NSString *symbol, *price;
+    NSMutableDictionary *stockQuoteDict = [NSMutableDictionary dictionaryWithCapacity:[csvList count]];
+    
+    for (NSString *csv in csvList) {
+        //NSLog(@"csv: %@", csv);
+        if ([csv isEqualToString:@""]) continue;
+        
+        values = [csv componentsSeparatedByString:@","];
+        //NSLog(@"values: [%@, %@, %@]", values[0], values[1], values[2]);
+        
+        symbol = [values[0] stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+        price = [values[1] stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+        
+        [stockQuoteDict setObject:price forKey:symbol];
+    }
+    
+    return stockQuoteDict;
 }
 
 - (NSString *) getStockQuoteForSymbol:(NSString *)symbol {
     return [self.stockQuotes objectForKey:symbol];
+}
+
+- (NSDictionary *)stockQuotes {
+    return _stockQuotes;
+}
+
+- (void)setStockQuotes:(NSDictionary *)stockQuotes {
+    _stockQuotes = [stockQuotes mutableCopy];
 }
 
 

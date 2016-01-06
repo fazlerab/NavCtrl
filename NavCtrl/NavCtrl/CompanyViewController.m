@@ -126,8 +126,10 @@
     
     // Set stock price
     NSString *stockPrice = [[NavCtrlDAO sharedInstance] getStockQuoteForSymbol:company.stockSymbol];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"Stock Price: %@\t\tTicker Symbol: %@",
-                                 stockPrice ? stockPrice : @"?", company.stockSymbol];
+    if ( stockPrice && ![stockPrice isEqualToString:@""] ) {
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ %@", company.stockSymbol,
+                                     stockPrice ? stockPrice : @""];
+    }
     
     return cell;
 }

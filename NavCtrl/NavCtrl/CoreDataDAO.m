@@ -7,6 +7,7 @@
 //
 
 #import <CoreData/CoreData.h>
+#import "AFNetworking.h"
 #import "CoreDataDAO.h"
 #import "Company.h"
 #import "Product.h"
@@ -27,6 +28,7 @@ static NSString *const CompanyAttribute     = @"company";
 
 @interface CoreDataDAO()
 
+@property (nonatomic, strong) AFHTTPSessionManager *sessionManager;
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 
 @end
@@ -482,4 +484,119 @@ static NSString *const CompanyAttribute     = @"company";
     return [[self.managedObjectContext undoManager] canRedo];
 }
 
+
+- (NSString *) allStockSymbols {
+    NSMutableString *symbols = nil;
+    
+    NSArray<Company *> *companies = [super getCompanyList];
+    if (companies && companies.count > 0) {
+        // Build a string of stock symbols by concatenating symbol from each company with '+' in between.
+        symbols = [[[NSMutableString alloc] init] autorelease];
+        
+        [companies enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            Company *company = (Company *)obj;
+            
+            if (company.stockSymbol && ![company.stockSymbol isEqualToString:@""]) {
+                if (symbols.length == 0) {
+                    [symbols appendString:company.stockSymbol];
+                } else {
+                    [symbols appendString:@"+"];
+                    [symbols appendString:company.stockSymbol];
+                }
+            }
+        }];
+    }
+    
+    return symbols;
+}
+
+BOOL isFetching = NO;
+
+- (void) fetchStockQuotes: (void(^)(void))fetchDidFinish {
+    if (isFetching) {
+        return;
+    } else {
+        isFetching = YES;
+    }
+    
+    NSString *symbols = [self allStockSymbols];
+    if (!symbols) return;
+    
+    if (!self.sessionManager) {
+        AFHTTPSessionManager *sessionManager = [AFHTTPSessionManager manager];
+        AFCSVResponseSerializer *responseSerializer = [AFCSVResponseSerializer serializer];
+        [sessionManager setResponseSerializer:responseSerializer];
+        self.sessionManager = sessionManager;
+    }
+    
+    NSDictionary *parameters = @{@"s":symbols, @"f":@"sl1d1t1"};
+    NSURLSessionDataTask *task = [self.sessionManager GET:@"http://finance.yahoo.com/d/quotes.csv"
+                                              parameters:parameters
+                                                 success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+                                                    
+                                                     NSDictionary *stockQuotes = (NSDictionary *)responseObject;
+                                                     [super setStockQuotes:stockQuotes];
+                                                     
+                                                     isFetching = NO;
+                                                     if (fetchDidFinish) fetchDidFinish();
+                                                 }
+                                                 failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                                                     isFetching = NO;
+                                                     NSLog(@"Error: %@\n%@", error.localizedDescription, error.userInfo);
+                                                 }];
+    [task resume];
+}
+
+@end
+
+
+@implementation AFCSVResponseSerializer
+
++ (instancetype)serializer {
+    AFCSVResponseSerializer *serializer = [[self alloc] init];
+    return serializer;
+}
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        [super setAcceptableContentTypes:[NSSet setWithObjects:@"text/plain", nil]];
+    }
+    return self;
+}
+
+- (id)responseObjectForResponse:(NSURLResponse *)response data:(NSData *)data error:(NSError * _Nullable *)error  {
+    if (![self validateResponse:(NSHTTPURLResponse *)response data:data error:error]) {
+        if (!error) return nil;
+    }
+    
+    id responseObject = nil;
+    
+    NSString *csvString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    NSArray<NSString *> *csvList = [csvString componentsSeparatedByString:@"\n"];
+    NSMutableDictionary *stockQuoteDict = [NSMutableDictionary dictionaryWithCapacity:[csvList count]];
+
+    [csvString release];
+
+    for (NSString *csv in csvList) {
+        if ([csv isEqualToString:@""]) continue;
+        
+        NSArray<NSString *> *values = [csv componentsSeparatedByString:@","];
+        NSString *symbol = [values[0] stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+        NSString *price = [values[1] stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+        NSString *date = [values[2] stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+        NSString *time = [values[3] stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+        
+        NSString *lastTrade = [NSString stringWithFormat:@"%@ %@ %@",
+                               [price isEqualToString:@"N/A"] ? @"" : price,
+                               [date isEqualToString:@"N/A"] ? @"" : date,
+                               [time isEqualToString:@"N/A"] ? @"" : time];
+        
+        [stockQuoteDict setObject:lastTrade forKey:symbol];
+    }
+    
+    responseObject = stockQuoteDict;
+
+    return responseObject;
+}
 @end

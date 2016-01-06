@@ -15,6 +15,8 @@
 
 + (NavCtrlDAO *) sharedInstance;
 
+@property (nonatomic, retain) NSDictionary *stockQuotes;
+
 // MARK: Company methods
 - (void) loadCompanyList:(void(^)(void))completionBlock;
 
@@ -65,5 +67,7 @@
 // MARK: Fetch Stock Quotes methods
 - (void) fetchStockQuotes:(void(^)(void))fetchDidFinish;
 - (NSString *) getStockQuoteForSymbol:(NSString *)symbol;
+- (NSDictionary *)stockQuotes;
+- (void)setStockQuotes:(NSDictionary *)stockQuotes;
 
 @end
